@@ -1,0 +1,92 @@
+// Main SCSS file for Template Boilerplate
+// Variables
+$primary-color: #333;
+$secondary-color: #666;
+$background-color: #f4f4f4;
+$text-color: #333;
+$font-family: 'Arial, sans-serif';
+$font-size-base: 16px;
+$line-height-base: 1.6;
+
+// Reset and base styles
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: $font-family;
+    font-size: $font-size-base;
+    line-height: $line-height-base;
+    color: $text-color;
+    background-color: $background-color;
+}
+
+// Header styles
+header {
+    background-color: $primary-color;
+    color: white;
+    text-align: center;
+    padding: 2rem 0;
+    
+    h1 {
+        font-size: 2.5rem;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        
+        &:hover {
+            color: #ddd;
+        }
+    }
+}
+
+// Main content styles
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    
+    section {
+        margin-bottom: 2rem;
+        
+        h2 {
+            color: $primary-color;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        p {
+            color: $secondary-color;
+            margin-bottom: 1rem;
+        }
+    }
+}
+
+// Footer styles
+footer {
+    background-color: $primary-color;
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: 2rem;
+    
+    p {
+        font-size: 0.9rem;
+    }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 2rem;
+    }
+    
+    main {
+        padding: 1rem;
+    }
+    
+    main section h2 {
+        font-size: 1.5rem;
+    }
+}
