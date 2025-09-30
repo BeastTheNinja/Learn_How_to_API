@@ -1,0 +1,323 @@
+// =============================================================================
+// MODERN SCSS FUNCTIONS - Utility functions using Sass modules
+// =============================================================================
+
+@use 'sass:math';
+@use 'sass:map';
+@use 'sass:color';
+@use 'sass:string';
+@use 'sass:list';
+@use 'variables' as v;
+
+// =============================================================================
+// COLOR FUNCTIONS
+// =============================================================================
+
+/// Get color from type colors map
+/// @param {String} $type - Pokemon type name
+/// @return {Color} - Type color
+@function get-type-color($type) {
+  @return map.get(v.$type-colors, $type) or #68a090;
+}
+
+/// Get gray shade from palette
+/// @param {Number} $shade - Shade number (50-950)
+/// @return {Color} - Gray color
+@function gray($shade) {
+  @return map.get(v.$gray-palette, $shade);
+}
+
+/// Lighten color by percentage
+/// @param {Color} $color - Base color
+/// @param {Number} $percentage - Percentage to lighten
+/// @return {Color} - Lightened color
+@function lighten-color($color, $percentage) {
+  @return color.scale($color, $lightness: $percentage);
+}
+
+/// Darken color by percentage
+/// @param {Color} $color - Base color
+/// @param {Number} $percentage - Percentage to darken (negative value)
+/// @return {Color} - Darkened color
+@function darken-color($color, $percentage) {
+  @return color.scale($color, $lightness: -$percentage);
+}
+
+/// Create transparent version of color
+/// @param {Color} $color - Base color
+/// @param {Number} $alpha - Alpha value (0-1)
+/// @return {Color} - Color with alpha
+@function alpha-color($color, $alpha) {
+  @return color.change($color, $alpha: $alpha);
+}
+
+// =============================================================================
+// SPACING FUNCTIONS
+// =============================================================================
+
+/// Get spacing value from map
+/// @param {Number|String} $key - Spacing key
+/// @return {Length} - Spacing value
+@function spacing($key) {
+  @return map.get(v.$spacing, $key) or 0;
+}
+
+/// Calculate spacing with multiplier
+/// @param {Number|String} $base - Base spacing key
+/// @param {Number} $multiplier - Multiplier
+/// @return {Length} - Calculated spacing
+@function spacing-scale($base, $multiplier: 1) {
+  $base-value: spacing($base);
+  @return $base-value * $multiplier;
+}
+
+// =============================================================================
+// TYPOGRAPHY FUNCTIONS
+// =============================================================================
+
+/// Get font size from map
+/// @param {String} $size - Font size key
+/// @return {Length} - Font size value
+@function font-size($size) {
+  @return map.get(v.$font-sizes, $size) or 1rem;
+}
+
+/// Get font weight from map
+/// @param {String} $weight - Font weight key
+/// @return {Number} - Font weight value
+@function font-weight($weight) {
+  @return map.get(v.$font-weights, $weight) or 400;
+}
+
+/// Get line height from map
+/// @param {String} $height - Line height key
+/// @return {Number} - Line height value
+@function line-height($height) {
+  @return map.get(v.$line-heights, $height) or 1.5;
+}
+
+/// Convert px to rem
+/// @param {Number} $px - Pixel value
+/// @param {Number} $base - Base font size in px
+/// @return {Length} - Rem value
+@function px-to-rem($px, $base: 16px) {
+  @return math.div($px, $base) * 1rem;
+}
+
+/// Convert rem to px
+/// @param {Number} $rem - Rem value
+/// @param {Number} $base - Base font size in px
+/// @return {Length} - Pixel value
+@function rem-to-px($rem, $base: 16px) {
+  @return $rem * $base;
+}
+
+// =============================================================================
+// LAYOUT FUNCTIONS
+// =============================================================================
+
+/// Get breakpoint value
+/// @param {String} $breakpoint - Breakpoint name
+/// @return {Length} - Breakpoint value
+@function breakpoint($breakpoint) {
+  @return map.get(v.$breakpoints, $breakpoint);
+}
+
+/// Calculate container max-width for breakpoint
+/// @param {String} $breakpoint - Breakpoint name
+/// @param {Number} $offset - Offset in px
+/// @return {Length} - Container width
+@function container-width($breakpoint, $offset: 32px) {
+  $bp-value: breakpoint($breakpoint);
+  @if $bp-value {
+    @return $bp-value - $offset;
+  }
+  @return 100%;
+}
+
+/// Get border radius value
+/// @param {String} $radius - Border radius key
+/// @return {Length} - Border radius value
+@function border-radius($radius) {
+  @return map.get(v.$border-radius, $radius) or 0;
+}
+
+// =============================================================================
+// Z-INDEX FUNCTIONS
+// =============================================================================
+
+/// Get z-index value from map
+/// @param {String} $layer - Z-index layer name
+/// @return {Number} - Z-index value
+@function z-index($layer) {
+  @return map.get(v.$z-index, $layer) or 1;
+}
+
+// =============================================================================
+// UTILITY FUNCTIONS
+// =============================================================================
+
+/// Strip unit from number
+/// @param {Number} $number - Number with unit
+/// @return {Number} - Unitless number
+@function strip-unit($number) {
+  @if type-of($number) == 'number' and not unitless($number) {
+    @return math.div($number, $number * 0 + 1);
+  }
+  @return $number;
+}
+
+/// Check if number is even
+/// @param {Number} $number - Number to check
+/// @return {Boolean} - True if even
+@function is-even($number) {
+  @return $number % 2 == 0;
+}
+
+/// Check if number is odd
+/// @param {Number} $number - Number to check
+/// @return {Boolean} - True if odd
+@function is-odd($number) {
+  @return $number % 2 != 0;
+}
+
+/// Clamp number between min and max
+/// @param {Number} $value - Value to clamp
+/// @param {Number} $min - Minimum value
+/// @param {Number} $max - Maximum value
+/// @return {Number} - Clamped value
+@function clamp-number($value, $min, $max) {
+  @return math.max($min, math.min($max, $value));
+}
+
+/// Get map value with fallback
+/// @param {Map} $map - Map to search
+/// @param {String} $key - Key to find
+/// @param {Any} $fallback - Fallback value
+/// @return {Any} - Map value or fallback
+@function map-get-fallback($map, $key, $fallback: null) {
+  @return map.get($map, $key) or $fallback;
+}
+
+/// Deep merge two maps
+/// @param {Map} $map1 - First map
+/// @param {Map} $map2 - Second map
+/// @return {Map} - Merged map
+@function map-deep-merge($map1, $map2) {
+  $result: $map1;
+  
+  @each $key, $value in $map2 {
+    @if type-of($value) == 'map' and type-of(map.get($result, $key)) == 'map' {
+      $result: map.set($result, $key, map-deep-merge(map.get($result, $key), $value));
+    } @else {
+      $result: map.set($result, $key, $value);
+    }
+  }
+  
+  @return $result;
+}
+
+/// Convert string to kebab-case
+/// @param {String} $string - String to convert
+/// @return {String} - Kebab-case string
+@function to-kebab-case($string) {
+  $result: '';
+  
+  @for $i from 1 through string.length($string) {
+    $char: string.slice($string, $i, $i);
+    
+    @if $char == string.to-upper-case($char) and $char != string.to-lower-case($char) {
+      @if $i > 1 {
+        $result: $result + '-';
+      }
+      $result: $result + string.to-lower-case($char);
+    } @else {
+      $result: $result + $char;
+    }
+  }
+  
+  @return $result;
+}
+
+// =============================================================================
+// RESPONSIVE FUNCTIONS
+// =============================================================================
+
+/// Calculate fluid typography
+/// @param {Number} $min-size - Minimum font size
+/// @param {Number} $max-size - Maximum font size
+/// @param {Number} $min-screen - Minimum screen size
+/// @param {Number} $max-screen - Maximum screen size
+/// @return {String} - Clamp function for fluid typography
+@function fluid-type($min-size, $max-size, $min-screen: 320px, $max-screen: 1200px) {
+  // Convert to unitless numbers for calculation
+  $min-size-value: strip-unit($min-size);
+  $max-size-value: strip-unit($max-size);
+  $min-screen-value: strip-unit($min-screen);
+  $max-screen-value: strip-unit($max-screen);
+  
+  // Calculate slope and y-intercept
+  $slope: math.div($max-size-value - $min-size-value, $max-screen-value - $min-screen-value);
+  $y-intercept: $min-size-value - ($slope * $min-screen-value);
+  
+  @return clamp(#{$min-size}, #{$y-intercept}rem + #{$slope * 100}vw, #{$max-size});
+}
+
+/// Calculate container query width
+/// @param {Number} $columns - Number of columns
+/// @param {Number} $gap - Gap between columns
+/// @param {Number} $min-width - Minimum column width
+/// @return {Length} - Container width
+@function container-query-width($columns, $gap: 1rem, $min-width: 250px) {
+  $gap-value: strip-unit($gap);
+  $min-width-value: strip-unit($min-width);
+  $total-gap: ($columns - 1) * $gap-value;
+  $total-width: ($columns * $min-width-value) + $total-gap;
+  
+  @return #{$total-width}px;
+}
+
+// =============================================================================
+// POKEMON-SPECIFIC FUNCTIONS
+// =============================================================================
+
+/// Get stat color based on value
+/// @param {Number} $value - Stat value
+/// @return {Color} - Color for stat
+@function stat-color($value) {
+  @if $value >= 100 {
+    @return #059669; // green
+  } @else if $value >= 80 {
+    @return #0ea5e9; // blue
+  } @else if $value >= 60 {
+    @return #f59e0b; // yellow
+  } @else if $value >= 40 {
+    @return #f97316; // orange
+  } @else {
+    @return #ef4444; // red
+  }
+}
+
+/// Calculate stat percentage for bars
+/// @param {Number} $value - Stat value
+/// @param {Number} $max - Maximum possible value
+/// @return {Number} - Percentage
+@function stat-percentage($value, $max: 255) {
+  $percentage: math.div($value, $max) * 100%;
+  @return clamp-number($percentage, 0%, 100%);
+}
+
+/// Generate type effectiveness multiplier color
+/// @param {Number} $multiplier - Damage multiplier
+/// @return {Color} - Color representing effectiveness
+@function effectiveness-color($multiplier) {
+  @if $multiplier > 1 {
+    @return #dc2626; // Super effective - red
+  } @else if $multiplier < 1 and $multiplier > 0 {
+    @return #16a34a; // Not very effective - green
+  } @else if $multiplier == 0 {
+    @return #6b7280; // No effect - gray
+  } @else {
+    @return #374151; // Normal effectiveness - dark gray
+  }
+}

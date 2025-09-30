@@ -1,0 +1,752 @@
+// =============================================================================
+// GAMING COMPONENTS - Interactive gaming features for Pokemon app
+// =============================================================================
+
+@use 'sass:map';
+@use '../abstracts' as *;
+
+// =============================================================================
+// GAMING NAVIGATION
+// =============================================================================
+
+.gaming-nav {
+  @include card-style();
+  margin-bottom: spacing(6);
+  text-align: center;
+  
+  h4 {
+    margin-bottom: spacing(4);
+    @include text-gradient();
+  }
+  
+  .gaming-buttons {
+    gap: spacing(3);
+    @include responsive-grid(2, 3, 4, 6);
+    
+    @include breakpoint('md') {
+      gap: spacing(4);
+    }
+  }
+}
+
+// =============================================================================
+// COMPARISON TOOL
+// =============================================================================
+
+.comparison-tool {
+  @include card-style();
+  margin-bottom: spacing(8);
+  
+  h3 {
+    text-align: center;
+    margin-bottom: spacing(6);
+    @include text-gradient();
+  }
+  
+  .comparison-container {
+    @include grid-container(1, spacing(6));
+    align-items: start;
+    margin-bottom: spacing(6);
+    
+    @include breakpoint('md') {
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+    }
+  }
+  
+  .comparison-slot {
+    @include card-style(spacing(4), border-radius('lg'), var(--shadow-md));
+    min-height: 400px;
+    
+    h4 {
+      text-align: center;
+      margin-bottom: spacing(4);
+      color: var(--text-primary);
+      padding-bottom: spacing(2);
+      border-bottom: 2px solid var(--border-color);
+    }
+  }
+  
+  .comparison-vs {
+    @include center-content();
+    font-size: font-size('4xl');
+    font-weight: font-weight('black');
+    color: var(--color-primary);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    
+    @include mobile-only {
+      transform: rotate(90deg);
+      margin: spacing(4) 0;
+    }
+  }
+  
+  .comparison-actions {
+    @include flex-container(row, center, center);
+    gap: spacing(4);
+    padding-top: spacing(4);
+    border-top: 1px solid var(--border-color);
+    flex-wrap: wrap;
+    
+    @include mobile-only {
+      flex-direction: column;
+      
+      .action-btn {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// =============================================================================
+// BATTLE CALCULATOR
+// =============================================================================
+
+.battle-calculator {
+  @include card-style();
+  margin-bottom: spacing(8);
+  
+  h3 {
+    text-align: center;
+    margin-bottom: spacing(6);
+    @include text-gradient();
+  }
+  
+  .battle-setup {
+    @include grid-container(1, spacing(6));
+    margin-bottom: spacing(6);
+    
+    @include breakpoint('lg') {
+      grid-template-columns: 1fr auto 1fr;
+      align-items: start;
+    }
+  }
+  
+  .battle-pokemon {
+    @include card-style(spacing(4), border-radius('lg'), var(--shadow-md));
+    
+    h4 {
+      text-align: center;
+      margin-bottom: spacing(4);
+      color: var(--text-primary);
+    }
+    
+    .battle-slot {
+      min-height: 200px;
+      @include center-content();
+      background-color: var(--bg-secondary);
+      border: 2px dashed var(--border-color);
+      border-radius: border-radius('lg');
+      margin-bottom: spacing(4);
+      color: var(--text-muted);
+      text-align: center;
+      
+      &.has-pokemon {
+        border-style: solid;
+        border-color: var(--color-primary);
+        background-color: var(--bg-card);
+      }
+    }
+    
+    .battle-controls {
+      @include grid-container(1, spacing(3));
+      
+      @include breakpoint('sm') {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  }
+  
+  .battle-vs {
+    @include center-content();
+    font-size: font-size('3xl');
+    color: var(--color-primary);
+    
+    @include mobile-only {
+      transform: rotate(90deg);
+      margin: spacing(4) 0;
+    }
+  }
+  
+  .battle-result {
+    margin-top: spacing(4);
+    padding: spacing(4);
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+    border-radius: border-radius('lg');
+    text-align: center;
+    
+    .damage-calc {
+      font-size: font-size('2xl');
+      font-weight: font-weight('bold');
+      color: var(--color-primary);
+      margin-bottom: spacing(2);
+    }
+    
+    .effectiveness {
+      font-size: font-size('sm');
+      color: var(--text-secondary);
+    }
+  }
+}
+
+// =============================================================================
+// EVOLUTION CHAIN
+// =============================================================================
+
+.evolution-chain {
+  @include card-style();
+  margin-bottom: spacing(8);
+  
+  h3 {
+    text-align: center;
+    margin-bottom: spacing(6);
+    @include text-gradient();
+  }
+  
+  .evolution-display {
+    .evolution-stage {
+      @include flex-container(row, center, center);
+      gap: spacing(4);
+      margin-bottom: spacing(6);
+      flex-wrap: wrap;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+      
+      .evolution-pokemon {
+        @include card-style(spacing(3), border-radius('lg'), var(--shadow-sm));
+        text-align: center;
+        flex: 1;
+        min-width: 150px;
+        max-width: 200px;
+        transition: transform map.get($transitions, 'normal');
+        
+        &:hover {
+          transform: translateY(-4px);
+          box-shadow: var(--shadow-lg);
+        }
+        
+        .pokemon-image {
+          width: 80px;
+          height: 80px;
+          object-fit: contain;
+          margin: 0 auto spacing(2);
+          
+          @include breakpoint('md') {
+            width: 100px;
+            height: 100px;
+          }
+        }
+        
+        .pokemon-name {
+          font-size: font-size('sm');
+          font-weight: font-weight('semibold');
+          color: var(--text-primary);
+          text-transform: capitalize;
+          margin-bottom: spacing(1);
+          
+          @include breakpoint('md') {
+            font-size: font-size('base');
+          }
+        }
+        
+        .pokemon-level {
+          font-size: font-size('xs');
+          color: var(--text-muted);
+        }
+      }
+      
+      .evolution-arrow {
+        font-size: font-size('2xl');
+        color: var(--color-primary);
+        
+        @include mobile-only {
+          transform: rotate(90deg);
+        }
+        
+        @include breakpoint('md') {
+          font-size: font-size('3xl');
+        }
+      }
+    }
+  }
+}
+
+// =============================================================================
+// QUIZ GAME
+// =============================================================================
+
+.quiz-game {
+  @include card-style();
+  margin-bottom: spacing(8);
+  
+  h3 {
+    text-align: center;
+    margin-bottom: spacing(6);
+    @include text-gradient();
+  }
+  
+  .quiz-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .quiz-score {
+    @include flex-container(row, space-between, center);
+    margin-bottom: spacing(6);
+    padding: spacing(3) spacing(4);
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+    border-radius: border-radius('lg');
+    
+    span {
+      font-weight: font-weight('semibold');
+      color: var(--text-primary);
+      
+      span {
+        color: var(--color-primary);
+        font-family: map.get($font-families, 'mono');
+      }
+    }
+  }
+  
+  .quiz-pokemon {
+    text-align: center;
+    margin-bottom: spacing(6);
+    
+    .quiz-image-container {
+      position: relative;
+      margin-bottom: spacing(6);
+      
+      .quiz-image {
+        width: 200px;
+        height: 200px;
+        object-fit: contain;
+        margin: 0 auto;
+        border-radius: border-radius('lg');
+        transition: filter map.get($transitions, 'normal');
+        
+        @include breakpoint('md') {
+          width: 250px;
+          height: 250px;
+        }
+        
+        &.silhouette {
+          filter: brightness(0) saturate(100%);
+        }
+        
+        &.revealed {
+          filter: none;
+          animation: bounce 0.6s ease-out;
+        }
+      }
+    }
+    
+    .quiz-options {
+      gap: spacing(3);
+      @include responsive-grid(1, 2, 2, 2);
+      
+      .quiz-option {
+        @include button-base();
+        background-color: var(--bg-card);
+        border: 2px solid var(--border-color);
+        color: var(--text-primary);
+        padding: spacing(3) spacing(4);
+        text-transform: capitalize;
+        
+        &:hover:not(:disabled) {
+          border-color: var(--color-primary);
+          background-color: var(--state-hover);
+        }
+        
+        &.correct {
+          background-color: var(--color-success);
+          color: var(--text-on-dark);
+          border-color: var(--color-success);
+        }
+        
+        &.incorrect {
+          background-color: var(--color-error);
+          color: var(--text-on-dark);
+          border-color: var(--color-error);
+        }
+        
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+    }
+  }
+  
+  .quiz-actions {
+    @include flex-container(row, center, center);
+    gap: spacing(4);
+    flex-wrap: wrap;
+    
+    @include mobile-only {
+      flex-direction: column;
+      
+      .action-btn {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// =============================================================================
+// MOVESET DISPLAY
+// =============================================================================
+
+.moveset-display {
+  @include card-style();
+  margin-bottom: spacing(8);
+  
+  h3 {
+    text-align: center;
+    margin-bottom: spacing(6);
+    @include text-gradient();
+  }
+  
+  .moveset-container {
+    @include grid-container(1, spacing(6));
+    
+    @include breakpoint('lg') {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  .moves-section,
+  .tms-section {
+    h4 {
+      margin-bottom: spacing(4);
+      color: var(--text-primary);
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: spacing(2);
+    }
+    
+    .moves-grid {
+      @include grid-container(1, spacing(2));
+      
+      @include breakpoint('sm') {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      
+      @include breakpoint('xl') {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    .move-item {
+      @include flex-container(row, space-between, center);
+      padding: spacing(2) spacing(3);
+      background-color: var(--bg-secondary);
+      border-radius: border-radius('md');
+      border: 1px solid var(--border-color);
+      transition: all map.get($transitions, 'fast');
+      
+      &:hover {
+        border-color: var(--color-primary);
+        transform: translateX(4px);
+      }
+      
+      .move-name {
+        font-weight: font-weight('medium');
+        color: var(--text-primary);
+        text-transform: capitalize;
+      }
+      
+      .move-power {
+        font-family: map.get($font-families, 'mono');
+        font-size: font-size('sm');
+        color: var(--text-muted);
+        background-color: var(--bg-tertiary);
+        padding: spacing(1) spacing(2);
+        border-radius: border-radius('sm');
+      }
+    }
+  }
+}
+
+// =============================================================================
+// TYPE EFFECTIVENESS DISPLAY
+// =============================================================================
+
+.type-effectiveness {
+  @include card-style();
+  margin-bottom: spacing(8);
+  
+  h4 {
+    text-align: center;
+    margin-bottom: spacing(6);
+    color: var(--text-primary);
+  }
+  
+  .effectiveness-grid {
+    @include grid-container(1, spacing(4));
+    
+    @include breakpoint('md') {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    @include breakpoint('lg') {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  .effectiveness-category {
+    @include card-style(spacing(4), border-radius('lg'), var(--shadow-sm));
+    
+    h5 {
+      margin-bottom: spacing(3);
+      color: var(--text-primary);
+      font-size: font-size('sm');
+      text-align: center;
+    }
+    
+    .type-list {
+      @include flex-container(row, flex-start, center);
+      gap: spacing(2);
+      flex-wrap: wrap;
+      min-height: 3rem;
+      
+      .type-badge-small {
+        @include type-badge();
+        padding: 0.125rem 0.5rem;
+        font-size: font-size('xs');
+        border-radius: border-radius('sm');
+      }
+    }
+    
+    &.super-effective {
+      border-left: 4px solid var(--color-error);
+      
+      h5 {
+        color: var(--color-error);
+      }
+    }
+    
+    &.not-very-effective {
+      border-left: 4px solid var(--color-success);
+      
+      h5 {
+        color: var(--color-success);
+      }
+    }
+    
+    &.no-effect {
+      border-left: 4px solid var(--text-muted);
+      
+      h5 {
+        color: var(--text-muted);
+      }
+    }
+  }
+}
+
+// =============================================================================
+// FAVORITES SECTION
+// =============================================================================
+
+.favorites-section {
+  @include card-style();
+  margin-bottom: spacing(8);
+  
+  h3 {
+    text-align: center;
+    margin-bottom: spacing(6);
+    @include text-gradient();
+  }
+  
+  .favorites-grid {
+    gap: spacing(4);
+    @include responsive-grid(1, 2, 3, 4);
+    
+    @include breakpoint('2k') {
+      grid-template-columns: repeat(5, 1fr);
+    }
+    
+    .favorite-card {
+      @include card-style(spacing(3), border-radius('lg'), var(--shadow-sm));
+      text-align: center;
+      position: relative;
+      transition: transform map.get($transitions, 'normal');
+      
+      &:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+      }
+      
+      .remove-favorite {
+        position: absolute;
+        top: spacing(2);
+        right: spacing(2);
+        @include button-icon();
+        background-color: var(--color-error);
+        color: var(--text-on-dark);
+        width: 1.5rem;
+        height: 1.5rem;
+        border-radius: 50%;
+        font-size: font-size('xs');
+      }
+      
+      .pokemon-image {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        margin: 0 auto spacing(2);
+        border-radius: border-radius('md');
+      }
+      
+      .pokemon-name {
+        font-size: font-size('sm');
+        font-weight: font-weight('semibold');
+        color: var(--text-primary);
+        text-transform: capitalize;
+        margin-bottom: spacing(2);
+      }
+      
+      .pokemon-types {
+        @include flex-container(row, center, center);
+        gap: spacing(1);
+      }
+    }
+    
+    .no-favorites {
+      grid-column: 1 / -1;
+      text-align: center;
+      color: var(--text-muted);
+      padding: spacing(8);
+      border: 2px dashed var(--border-color);
+      border-radius: border-radius('lg');
+    }
+  }
+}
+
+// =============================================================================
+// LOADING ANIMATIONS
+// =============================================================================
+
+.enhanced-loader {
+  @include center-content();
+  flex-direction: column;
+  padding: spacing(8);
+  
+  .loader-container {
+    margin-bottom: spacing(4);
+    
+    .pokeball-advanced {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(to bottom, #f00 0%, #f00 45%, #000 45%, #000 55%, #fff 55%);
+      position: relative;
+      animation: spin 2s linear infinite;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 20px;
+        height: 20px;
+        background: #fff;
+        border: 3px solid #000;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+      }
+      
+      &::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 8px;
+        height: 8px;
+        background: #000;
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+      }
+    }
+  }
+  
+  .loading-dots {
+    @include flex-container(row, center, center);
+    gap: spacing(1);
+    margin-bottom: spacing(2);
+    
+    .dot {
+      width: 8px;
+      height: 8px;
+      background-color: var(--color-primary);
+      border-radius: 50%;
+      animation: pulse 1.5s ease-in-out infinite;
+      
+      &:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      
+      &:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+    }
+  }
+  
+  .loading-text {
+    color: var(--text-secondary);
+    font-weight: font-weight('medium');
+    animation: pulse 2s ease-in-out infinite;
+  }
+}
+
+// =============================================================================
+// RESPONSIVE GAMING ADJUSTMENTS
+// =============================================================================
+
+@include mobile-only {
+  .gaming-nav .gaming-buttons {
+    grid-template-columns: repeat(2, 1fr);
+    gap: spacing(2);
+  }
+  
+  .comparison-container {
+    gap: spacing(4);
+  }
+  
+  .quiz-pokemon .quiz-image-container .quiz-image {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .moveset-container {
+    gap: spacing(4);
+  }
+}
+
+@include high-res {
+  .gaming-nav .gaming-buttons {
+    grid-template-columns: repeat(8, 1fr);
+  }
+  
+  .favorites-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+// =============================================================================
+// DARK MODE GAMING ADJUSTMENTS
+// =============================================================================
+
+:root.dark-mode {
+  .enhanced-loader .pokeball-advanced {
+    background: linear-gradient(to bottom, #dc2626 0%, #dc2626 45%, #1f2937 45%, #1f2937 55%, #f9fafb 55%);
+    
+    &::before {
+      background: #f9fafb;
+      border-color: #1f2937;
+    }
+    
+    &::after {
+      background: #1f2937;
+    }
+  }
+}

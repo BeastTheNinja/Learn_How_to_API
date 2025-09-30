@@ -1,0 +1,606 @@
+// =============================================================================
+// FORM COMPONENTS - Modern form elements and search functionality
+// =============================================================================
+
+@use 'sass:map';
+@use '../abstracts' as *;
+
+// =============================================================================
+// BASE FORM STYLES
+// =============================================================================
+
+.form-group {
+  margin-bottom: spacing(6);
+  
+  .form-label {
+    display: block;
+    font-weight: font-weight('medium');
+    color: var(--text-primary);
+    margin-bottom: spacing(2);
+    font-size: font-size('sm');
+    
+    @include breakpoint('md') {
+      font-size: font-size('base');
+    }
+    
+    &.required::after {
+      content: ' *';
+      color: var(--color-error);
+    }
+  }
+  
+  .form-help {
+    font-size: font-size('xs');
+    color: var(--text-muted);
+    margin-top: spacing(1);
+    
+    @include breakpoint('md') {
+      font-size: font-size('sm');
+    }
+  }
+  
+  &.has-error {
+    .form-label {
+      color: var(--color-error);
+    }
+    
+    .form-input,
+    .form-select {
+      border-color: var(--color-error);
+      
+      &:focus {
+        border-color: var(--color-error);
+        box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+      }
+    }
+    
+    .form-help {
+      color: var(--color-error);
+    }
+  }
+}
+
+// =============================================================================
+// INPUT FIELDS
+// =============================================================================
+
+.form-input,
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="search"],
+input[type="url"],
+input[type="tel"] {
+  @include input-field();
+  
+  // Variants
+  &.input-sm {
+    height: 2.25rem;
+    padding: 0.5rem 0.75rem;
+    font-size: font-size('sm');
+  }
+  
+  &.input-lg {
+    height: 3.25rem;
+    padding: 1rem 1.25rem;
+    font-size: font-size('lg');
+  }
+  
+  // States
+  &.is-valid {
+    border-color: var(--color-success);
+    
+    &:focus {
+      border-color: var(--color-success);
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+    }
+  }
+  
+  &.is-invalid {
+    border-color: var(--color-error);
+    
+    &:focus {
+      border-color: var(--color-error);
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+    }
+  }
+}
+
+// =============================================================================
+// SEARCH COMPONENTS
+// =============================================================================
+
+.search-container {
+  position: relative;
+  display: flex;
+  width: 100%;
+  
+  .search-input {
+    flex: 1;
+    border-radius: border-radius('lg') 0 0 border-radius('lg');
+    border-right: none;
+    
+    &:focus {
+      z-index: 1;
+    }
+  }
+  
+  .search-btn {
+    border-radius: 0 border-radius('lg') border-radius('lg') 0;
+  }
+}
+
+// Search with autocomplete
+.search-autocomplete {
+  .autocomplete-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 2px; // Account for button width
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 border-radius('lg') border-radius('lg');
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: z-index('dropdown');
+    display: none;
+    box-shadow: var(--shadow-lg);
+    
+    &.show {
+      display: block;
+    }
+    
+    .autocomplete-item {
+      @include flex-container(row, flex-start, center);
+      gap: spacing(3);
+      padding: spacing(3) spacing(4);
+      cursor: pointer;
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color map.get($transitions, 'fast');
+      
+      &:last-child {
+        border-bottom: none;
+        border-radius: 0 0 border-radius('lg') border-radius('lg');
+      }
+      
+      &:hover,
+      &.highlighted {
+        background-color: var(--state-hover);
+      }
+      
+      .pokemon-id {
+        font-family: map.get($font-families, 'mono');
+        font-size: font-size('xs');
+        color: var(--text-muted);
+        background-color: var(--bg-tertiary);
+        padding: spacing(1) spacing(2);
+        border-radius: border-radius('sm');
+        flex-shrink: 0;
+      }
+      
+      .pokemon-name {
+        font-weight: font-weight('medium');
+        color: var(--text-primary);
+        text-transform: capitalize;
+      }
+    }
+  }
+}
+
+// =============================================================================
+// SELECT ELEMENTS
+// =============================================================================
+
+.form-select,
+select {
+  @include input-field();
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+  cursor: pointer;
+  
+  &:focus {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23dc2626' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  }
+  
+  option {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+    padding: spacing(2);
+  }
+}
+
+// =============================================================================
+// TEXTAREA
+// =============================================================================
+
+.form-textarea,
+textarea {
+  @include input-field();
+  min-height: 120px;
+  resize: vertical;
+  line-height: line-height('relaxed');
+  
+  &.textarea-sm {
+    min-height: 80px;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  &.textarea-lg {
+    min-height: 160px;
+    padding: 1rem 1.25rem;
+  }
+}
+
+// =============================================================================
+// CHECKBOX AND RADIO
+// =============================================================================
+
+.form-check {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: spacing(3);
+  
+  .form-check-input {
+    width: 1rem;
+    height: 1rem;
+    margin-top: 0.25em;
+    margin-right: spacing(2);
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-color);
+    border-radius: border-radius('sm');
+    cursor: pointer;
+    transition: all map.get($transitions, 'fast');
+    flex-shrink: 0;
+    
+    &:checked {
+      background-color: var(--color-primary);
+      border-color: var(--color-primary);
+      background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='m13.854 3.646-7.5 7.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6 10.293l7.146-7.147a.5.5 0 0 1 .708.708z'/%3e%3c/svg%3e");
+    }
+    
+    &:focus {
+      border-color: var(--border-focus);
+      box-shadow: var(--state-focus);
+    }
+    
+    &[type="radio"] {
+      border-radius: 50%;
+      
+      &:checked {
+        background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e");
+      }
+    }
+  }
+  
+  .form-check-label {
+    font-size: font-size('sm');
+    color: var(--text-primary);
+    cursor: pointer;
+    line-height: line-height('normal');
+    
+    @include breakpoint('md') {
+      font-size: font-size('base');
+    }
+  }
+}
+
+// =============================================================================
+// SWITCH/TOGGLE
+// =============================================================================
+
+.form-switch {
+  .form-check-input {
+    width: 2em;
+    height: 1em;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+    background-position: left center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    border-radius: 2em;
+    transition: background-position map.get($transitions, 'normal');
+    
+    &:checked {
+      background-position: right center;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+    }
+    
+    &:focus {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+    }
+  }
+}
+
+// =============================================================================
+// INPUT GROUPS
+// =============================================================================
+
+.input-group {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  width: 100%;
+  
+  .input-group-text {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1rem;
+    font-size: font-size('base');
+    font-weight: font-weight('normal');
+    line-height: line-height('normal');
+    color: var(--text-secondary);
+    text-align: center;
+    white-space: nowrap;
+    background-color: var(--bg-secondary);
+    border: 2px solid var(--border-color);
+    border-radius: border-radius('lg');
+  }
+  
+  .form-input {
+    position: relative;
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+  }
+  
+  // First child
+  > :first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  
+  // Last child
+  > :last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  
+  // Middle children
+  > :not(:first-child):not(:last-child) {
+    border-radius: 0;
+  }
+  
+  // Remove border between elements
+  .form-input:not(:first-child) {
+    border-left: none;
+  }
+  
+  .input-group-text + .form-input {
+    border-left: none;
+  }
+}
+
+// =============================================================================
+// FLOATING LABELS
+// =============================================================================
+
+.form-floating {
+  position: relative;
+  
+  .form-input,
+  .form-select,
+  .form-textarea {
+    height: calc(3.5rem + 2px);
+    line-height: 1.25;
+    padding: 1rem 0.75rem 0.25rem;
+    
+    &::placeholder {
+      color: transparent;
+    }
+    
+    &:focus,
+    &:not(:placeholder-shown) {
+      ~ .form-label {
+        opacity: 0.65;
+        transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+      }
+    }
+  }
+  
+  .form-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    padding: 1rem 0.75rem;
+    pointer-events: none;
+    border: 1px solid transparent;
+    transform-origin: 0 0;
+    transition: opacity map.get($transitions, 'fast'), transform map.get($transitions, 'fast');
+    margin-bottom: 0;
+    line-height: 1.5;
+  }
+  
+  .form-textarea ~ .form-label {
+    height: 3.5rem;
+  }
+}
+
+// =============================================================================
+// FORM VALIDATION FEEDBACK
+// =============================================================================
+
+.valid-feedback {
+  display: none;
+  width: 100%;
+  margin-top: spacing(1);
+  font-size: font-size('sm');
+  color: var(--color-success);
+  
+  .is-valid ~ & {
+    display: block;
+  }
+}
+
+.invalid-feedback {
+  display: none;
+  width: 100%;
+  margin-top: spacing(1);
+  font-size: font-size('sm');
+  color: var(--color-error);
+  
+  .is-invalid ~ & {
+    display: block;
+  }
+}
+
+// =============================================================================
+// POKEMON-SPECIFIC FORM COMPONENTS
+// =============================================================================
+
+// Pokemon search form
+.pokemon-search-form {
+  max-width: 600px;
+  margin: 0 auto;
+  
+  .search-group {
+    margin-bottom: spacing(4);
+    
+    label {
+      font-weight: font-weight('semibold');
+      margin-bottom: spacing(3);
+      color: var(--text-primary);
+      text-align: center;
+      display: block;
+    }
+  }
+  
+  .action-buttons {
+    @include flex-container(row, center, center);
+    gap: spacing(4);
+    flex-wrap: wrap;
+    
+    @include mobile-only {
+      flex-direction: column;
+      
+      .action-btn {
+        width: 100%;
+      }
+    }
+  }
+}
+
+// Gaming controls
+.gaming-controls {
+  @include grid-container(1, spacing(4));
+  margin-bottom: spacing(6);
+  
+  @include breakpoint('md') {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .control-group {
+    @include flex-container(column, flex-start, stretch);
+    gap: spacing(2);
+    
+    label {
+      font-weight: font-weight('medium');
+      color: var(--text-primary);
+      font-size: font-size('sm');
+    }
+  }
+}
+
+// Battle setup controls
+.battle-controls {
+  @include grid-container(1, spacing(3));
+  
+  @include breakpoint('sm') {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  label {
+    font-size: font-size('sm');
+    font-weight: font-weight('medium');
+    color: var(--text-secondary);
+    margin-bottom: spacing(1);
+  }
+  
+  input,
+  select {
+    font-size: font-size('sm');
+    height: 2.25rem;
+    padding: 0.5rem 0.75rem;
+  }
+}
+
+// =============================================================================
+// RESPONSIVE FORM ADJUSTMENTS
+// =============================================================================
+
+@include mobile-only {
+  .form-input,
+  .form-select,
+  .form-textarea {
+    font-size: 16px; // Prevent zoom on iOS
+  }
+  
+  .search-container {
+    flex-direction: column;
+    
+    .search-input {
+      border-radius: border-radius('lg');
+      border-right: 2px solid var(--border-color);
+      margin-bottom: spacing(2);
+    }
+    
+    .search-btn {
+      border-radius: border-radius('lg');
+      width: 100%;
+    }
+  }
+  
+  .input-group {
+    flex-direction: column;
+    
+    > * {
+      border-radius: border-radius('lg') !important;
+      border: 2px solid var(--border-color) !important;
+      margin-bottom: spacing(2);
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+@include high-res {
+  .form-input,
+  .form-select,
+  .form-textarea {
+    font-size: font-size('lg');
+    height: 3.5rem;
+    padding: 1rem 1.5rem;
+  }
+  
+  .form-label {
+    font-size: font-size('lg');
+  }
+}
+
+// =============================================================================
+// DARK MODE FORM ADJUSTMENTS
+// =============================================================================
+
+:root.dark-mode {
+  .form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    
+    &:focus {
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23dc2626' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    }
+  }
+  
+  .autocomplete-dropdown {
+    .pokemon-id {
+      background-color: var(--bg-secondary);
+    }
+  }
+}

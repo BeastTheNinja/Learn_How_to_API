@@ -1,0 +1,406 @@
+// =============================================================================
+// TYPOGRAPHY SYSTEM - Modern responsive typography for Pokédex
+// =============================================================================
+
+@use 'sass:map';
+@use '../abstracts' as *;
+
+// =============================================================================
+// FONT LOADING - Import Inter font from Google Fonts
+// =============================================================================
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
+
+// =============================================================================
+// HEADING STYLES - Responsive and accessible
+// =============================================================================
+
+h1, .h1 {
+  @include heading('4xl', 'black');
+  
+  @include breakpoint('md') {
+    font-size: font-size('5xl');
+  }
+  
+  @include breakpoint('lg') {
+    font-size: font-size('6xl');
+  }
+  
+  // Pokemon-specific styling
+  &.pokemon-name {
+    @include text-gradient();
+    text-align: center;
+    margin-bottom: spacing(4);
+  }
+}
+
+h2, .h2 {
+  @include heading('3xl', 'bold');
+  
+  @include breakpoint('md') {
+    font-size: font-size('4xl');
+  }
+  
+  &.section-title {
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: spacing(2);
+    margin-bottom: spacing(6);
+  }
+}
+
+h3, .h3 {
+  @include heading('2xl', 'semibold');
+  
+  @include breakpoint('md') {
+    font-size: font-size('3xl');
+  }
+  
+  &.card-title {
+    margin-bottom: spacing(3);
+    color: var(--text-primary);
+  }
+}
+
+h4, .h4 {
+  @include heading('xl', 'semibold');
+  
+  @include breakpoint('md') {
+    font-size: font-size('2xl');
+  }
+  
+  &.subsection-title {
+    margin-bottom: spacing(2);
+    color: var(--text-secondary);
+    font-weight: font-weight('medium');
+  }
+}
+
+h5, .h5 {
+  @include heading('lg', 'medium');
+  
+  &.stat-label {
+    font-size: font-size('sm');
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-muted);
+  }
+}
+
+h6, .h6 {
+  @include heading('base', 'medium');
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+// =============================================================================
+// BODY TEXT STYLES
+// =============================================================================
+
+p, .text-body {
+  font-size: font-size('base');
+  line-height: line-height('relaxed');
+  color: var(--text-secondary);
+  margin-bottom: spacing(4);
+  
+  @include breakpoint('lg') {
+    font-size: font-size('lg');
+  }
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+  
+  // Text variants
+  &.text-lead {
+    font-size: font-size('lg');
+    font-weight: font-weight('medium');
+    color: var(--text-primary);
+    
+    @include breakpoint('lg') {
+      font-size: font-size('xl');
+    }
+  }
+  
+  &.text-small {
+    font-size: font-size('sm');
+    color: var(--text-muted);
+  }
+  
+  &.text-caption {
+    font-size: font-size('xs');
+    color: var(--text-muted);
+    line-height: line-height('normal');
+  }
+}
+
+// =============================================================================
+// SPECIALIZED TEXT STYLES
+// =============================================================================
+
+// Pokemon ID formatting
+.pokemon-id {
+  font-family: map.get($font-families, 'mono');
+  font-size: font-size('sm');
+  font-weight: font-weight('semibold');
+  color: var(--text-muted);
+  background-color: var(--bg-tertiary);
+  padding: spacing(1) spacing(2);
+  border-radius: border-radius('sm');
+  
+  @include breakpoint('md') {
+    font-size: font-size('base');
+  }
+}
+
+// Stat values
+.stat-value {
+  font-family: map.get($font-families, 'mono');
+  font-size: font-size('lg');
+  font-weight: font-weight('bold');
+  color: var(--text-primary);
+  
+  @include breakpoint('md') {
+    font-size: font-size('xl');
+  }
+}
+
+// Pokemon names in cards
+.pokemon-name {
+  font-size: font-size('2xl');
+  font-weight: font-weight('bold');
+  color: var(--text-primary);
+  text-transform: capitalize;
+  text-align: center;
+  margin: spacing(2) 0;
+  
+  @include breakpoint('md') {
+    font-size: font-size('3xl');
+  }
+}
+
+// Type badges text
+.type-text {
+  font-size: font-size('xs');
+  font-weight: font-weight('semibold');
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: white;
+  
+  @include breakpoint('md') {
+    font-size: font-size('sm');
+  }
+}
+
+// Ability names
+.ability-name {
+  font-size: font-size('sm');
+  font-weight: font-weight('medium');
+  color: var(--text-primary);
+  text-transform: capitalize;
+  
+  &.hidden-ability {
+    font-style: italic;
+    color: var(--color-accent);
+  }
+}
+
+// Move names
+.move-name {
+  font-size: font-size('sm');
+  font-weight: font-weight('medium');
+  color: var(--text-primary);
+  text-transform: capitalize;
+  
+  @include breakpoint('md') {
+    font-size: font-size('base');
+  }
+}
+
+// Quiz text
+.quiz-text {
+  font-size: font-size('lg');
+  font-weight: font-weight('medium');
+  color: var(--text-primary);
+  text-align: center;
+  
+  @include breakpoint('md') {
+    font-size: font-size('xl');
+  }
+}
+
+// Score display
+.score-text {
+  font-family: map.get($font-families, 'mono');
+  font-size: font-size('xl');
+  font-weight: font-weight('bold');
+  color: var(--color-primary);
+  
+  @include breakpoint('md') {
+    font-size: font-size('2xl');
+  }
+}
+
+// =============================================================================
+// UTILITY TEXT CLASSES
+// =============================================================================
+
+// Text alignment
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-justify { text-align: justify; }
+
+// Text colors
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+.text-success { color: var(--color-success); }
+.text-warning { color: var(--color-warning); }
+.text-error { color: var(--color-error); }
+.text-info { color: var(--color-info); }
+
+// Text weights
+.text-light { font-weight: font-weight('light'); }
+.text-normal { font-weight: font-weight('normal'); }
+.text-medium { font-weight: font-weight('medium'); }
+.text-semibold { font-weight: font-weight('semibold'); }
+.text-bold { font-weight: font-weight('bold'); }
+.text-black { font-weight: font-weight('black'); }
+
+// Text transforms
+.text-uppercase { text-transform: uppercase; }
+.text-lowercase { text-transform: lowercase; }
+.text-capitalize { text-transform: capitalize; }
+.text-normal-case { text-transform: none; }
+
+// Text decoration
+.text-underline { text-decoration: underline; }
+.text-line-through { text-decoration: line-through; }
+.text-no-underline { text-decoration: none; }
+
+// Text overflow
+.text-truncate {
+  @include text-truncate();
+}
+
+.text-ellipsis {
+  @include text-truncate();
+}
+
+.text-clip {
+  text-overflow: clip;
+}
+
+// Line clamping
+.text-clamp-1 { @include text-truncate-lines(1); }
+.text-clamp-2 { @include text-truncate-lines(2); }
+.text-clamp-3 { @include text-truncate-lines(3); }
+.text-clamp-4 { @include text-truncate-lines(4); }
+
+// Letter spacing
+.tracking-tight { letter-spacing: -0.025em; }
+.tracking-normal { letter-spacing: 0; }
+.tracking-wide { letter-spacing: 0.025em; }
+.tracking-wider { letter-spacing: 0.05em; }
+.tracking-widest { letter-spacing: 0.1em; }
+
+// Line height utilities
+.leading-none { line-height: line-height('none'); }
+.leading-tight { line-height: line-height('tight'); }
+.leading-snug { line-height: line-height('snug'); }
+.leading-normal { line-height: line-height('normal'); }
+.leading-relaxed { line-height: line-height('relaxed'); }
+.leading-loose { line-height: line-height('loose'); }
+
+// =============================================================================
+// RESPONSIVE TEXT SCALING
+// =============================================================================
+
+// Simple responsive text scaling
+.text-responsive {
+  font-size: font-size('sm');
+  
+  @include breakpoint('md') {
+    font-size: font-size('base');
+  }
+  
+  @include breakpoint('lg') {
+    font-size: font-size('lg');
+  }
+}
+
+.text-responsive-lg {
+  font-size: font-size('base');
+  
+  @include breakpoint('md') {
+    font-size: font-size('lg');
+  }
+  
+  @include breakpoint('lg') {
+    font-size: font-size('xl');
+  }
+}
+
+.text-responsive-xl {
+  font-size: font-size('lg');
+  
+  @include breakpoint('md') {
+    font-size: font-size('xl');
+  }
+  
+  @include breakpoint('lg') {
+    font-size: font-size('2xl');
+  }
+}
+
+// =============================================================================
+// SPECIAL EFFECTS
+// =============================================================================
+
+// Gradient text
+.text-gradient {
+  @include text-gradient();
+}
+
+.text-gradient-pokemon {
+  @include text-gradient((var(--color-primary), var(--color-accent), var(--color-secondary)));
+}
+
+// Glowing text effect
+.text-glow {
+  text-shadow: 
+    0 0 5px currentColor,
+    0 0 10px currentColor,
+    0 0 15px currentColor;
+}
+
+// Text with backdrop
+.text-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: spacing(1) spacing(2);
+  border-radius: border-radius('sm');
+  backdrop-filter: blur(4px);
+}
+
+// =============================================================================
+// DARK MODE ADJUSTMENTS
+// =============================================================================
+
+:root.dark-mode {
+  .text-backdrop {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .pokemon-id {
+    background-color: var(--bg-secondary);
+  }
+  
+  .text-glow {
+    text-shadow: 
+      0 0 5px rgba(255, 255, 255, 0.5),
+      0 0 10px rgba(255, 255, 255, 0.3),
+      0 0 15px rgba(255, 255, 255, 0.1);
+  }
+}

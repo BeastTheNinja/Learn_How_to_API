@@ -8,21 +8,51 @@
     <script src="assets/js/main.js" defer></script>
 </head>
 <body>
+    <!-- Dark Mode Toggle Button -->
+    <button id="theme-toggle" class="theme-toggle" title="Toggle Dark/Light Mode">
+        <span class="theme-icon">🌙</span>
+    </button>
+
     <header>
         <h1>🔴 PokéDex Explorer</h1>
         <p>Discover amazing Pokémon from the Kanto region and beyond!</p>
     </header>
     
     <main>
+        <!-- Favorites Section -->
+        <section id="favorites-section" class="favorites-section" style="display: none;">
+            <h3>⭐ Your Favorite Pokémon</h3>
+            <div id="favorites-grid" class="favorites-grid">
+                <div class="no-favorites">
+                    <p>No favorite Pokémon yet! Click the heart button on any Pokémon to add them here.</p>
+                </div>
+            </div>
+        </section>
+
         <section class="controls">
             <h2>Search Pokémon</h2>
+            
+            <!-- Gaming Features Navigation -->
+            <div class="gaming-nav">
+                <h4>🎮 Gaming Features</h4>
+                <div class="gaming-buttons">
+                    <button class="gaming-btn" data-feature="comparison">⚔️ Compare</button>
+                    <button class="gaming-btn" data-feature="quiz">❓ Quiz</button>
+                    <button class="gaming-btn" data-feature="battle">💥 Battle</button>
+                    <button class="gaming-btn" data-feature="evolution">🔄 Evolution</button>
+                    <button class="gaming-btn" data-feature="moves">⚡ Moves</button>
+                    <button class="gaming-btn" data-feature="shiny">✨ Shiny</button>
+                </div>
+            </div>
             
             <div class="search-options">
                 <div class="search-group">
                     <label for="pokemon-search">Enter Pokémon name or ID (1-1010):</label>
-                    <div class="search-container">
-                        <input type="text" id="pokemon-search" placeholder="e.g., pikachu, charizard, 25" class="search-input">
+                    <div class="search-container search-autocomplete">
+                        <input type="text" id="pokemon-search" placeholder="e.g., pikachu, charizard, 25" class="search-input" autocomplete="off">
                         <button id="search-btn" class="search-btn">🔍 Search</button>
+                        <!-- Autocomplete Dropdown -->
+                        <div id="autocomplete-dropdown" class="autocomplete-dropdown"></div>
                     </div>
                 </div>
                 
@@ -32,9 +62,17 @@
                 </div>
             </div>
             
-            <div id="loading" class="loading" style="display: none;">
-                <div class="pokeball-loader"></div>
-                <p>Searching for Pokémon...</p>
+            <!-- Enhanced Loading Animation -->
+            <div id="loading" class="enhanced-loader" style="display: none;">
+                <div class="loader-container">
+                    <div class="pokeball-advanced"></div>
+                </div>
+                <div class="loading-dots">
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+                <p class="loading-text">Searching for Pokémon...</p>
             </div>
         </section>
         
@@ -43,6 +81,7 @@
                 <h3>🌟 Welcome to the PokéDex!</h3>
                 <p>Search for any Pokémon by name or number to see their stats, abilities, and more!</p>
                 <p>Try searching for popular Pokémon like "pikachu", "charizard", or "mewtwo"</p>
+                <p>💡 <strong>New Features:</strong> Toggle dark mode, save favorites, and see type effectiveness!</p>
                 <div class="popular-pokemon">
                     <h4>Popular Choices:</h4>
                     <div class="quick-buttons">
@@ -51,6 +90,149 @@
                         <button class="quick-btn" onclick="searchPokemon('blastoise')">Blastoise</button>
                         <button class="quick-btn" onclick="searchPokemon('venusaur')">Venusaur</button>
                         <button class="quick-btn" onclick="searchPokemon('mewtwo')">Mewtwo</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Type Effectiveness Chart (Hidden by default) -->
+        <section id="type-effectiveness" class="type-effectiveness" style="display: none;">
+            <h4>🎯 Type Effectiveness Chart</h4>
+            <div class="effectiveness-grid">
+                <div class="effectiveness-category super-effective">
+                    <h5>Super Effective Against (2x damage):</h5>
+                    <div class="type-list" id="super-effective-types"></div>
+                </div>
+                <div class="effectiveness-category not-very-effective">
+                    <h5>Not Very Effective Against (0.5x damage):</h5>
+                    <div class="type-list" id="not-very-effective-types"></div>
+                </div>
+                <div class="effectiveness-category no-effect">
+                    <h5>No Effect Against (0x damage):</h5>
+                    <div class="type-list" id="no-effect-types"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pokémon Comparison Tool -->
+        <section id="comparison-tool" class="comparison-tool" style="display: none;">
+            <h3>⚔️ Pokémon Comparison Tool</h3>
+            <div class="comparison-container">
+                <div class="comparison-slot" id="comparison-slot-1">
+                    <h4>Pokémon 1</h4>
+                    <div class="comparison-placeholder">
+                        <p>Search for a Pokémon and click "Add to Compare" to start comparison</p>
+                    </div>
+                </div>
+                <div class="comparison-vs">VS</div>
+                <div class="comparison-slot" id="comparison-slot-2">
+                    <h4>Pokémon 2</h4>
+                    <div class="comparison-placeholder">
+                        <p>Add a second Pokémon to compare stats and abilities</p>
+                    </div>
+                </div>
+            </div>
+            <div class="comparison-actions">
+                <button id="clear-comparison" class="action-btn secondary">🗑️ Clear Comparison</button>
+                <button id="battle-calculator" class="action-btn" onclick="showBattleCalculator()">⚔️ Battle Calculator</button>
+            </div>
+        </section>
+
+        <!-- Battle Damage Calculator -->
+        <section id="battle-calculator" class="battle-calculator" style="display: none;">
+            <h3>⚔️ Battle Damage Calculator</h3>
+            <div class="battle-setup">
+                <div class="battle-pokemon">
+                    <h4>Attacker</h4>
+                    <div id="battle-attacker" class="battle-slot">
+                        <p>Select a Pokémon from comparison or search</p>
+                    </div>
+                    <div class="battle-controls">
+                        <label>Move Power:</label>
+                        <input type="number" id="move-power" value="80" min="1" max="250">
+                        <label>Move Type:</label>
+                        <select id="move-type">
+                            <option value="normal">Normal</option>
+                            <option value="fire">Fire</option>
+                            <option value="water">Water</option>
+                            <option value="electric">Electric</option>
+                            <option value="grass">Grass</option>
+                            <option value="ice">Ice</option>
+                            <option value="fighting">Fighting</option>
+                            <option value="poison">Poison</option>
+                            <option value="ground">Ground</option>
+                            <option value="flying">Flying</option>
+                            <option value="psychic">Psychic</option>
+                            <option value="bug">Bug</option>
+                            <option value="rock">Rock</option>
+                            <option value="ghost">Ghost</option>
+                            <option value="dragon">Dragon</option>
+                            <option value="dark">Dark</option>
+                            <option value="steel">Steel</option>
+                            <option value="fairy">Fairy</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="battle-vs">⚔️</div>
+                <div class="battle-pokemon">
+                    <h4>Defender</h4>
+                    <div id="battle-defender" class="battle-slot">
+                        <p>Select a second Pokémon</p>
+                    </div>
+                    <div class="battle-result" id="battle-result">
+                        <p>Select both Pokémon to calculate damage</p>
+                    </div>
+                </div>
+            </div>
+            <button id="calculate-damage" class="action-btn" onclick="calculateDamage()">🧮 Calculate Damage</button>
+        </section>
+
+        <!-- Evolution Chain Viewer -->
+        <section id="evolution-chain" class="evolution-chain" style="display: none;">
+            <h3>🔄 Evolution Chain</h3>
+            <div id="evolution-display" class="evolution-display">
+                <p>Loading evolution chain...</p>
+            </div>
+        </section>
+
+        <!-- Pokémon Quiz Game -->
+        <section id="quiz-game" class="quiz-game" style="display: none;">
+            <h3>❓ Who's That Pokémon?</h3>
+            <div class="quiz-container">
+                <div class="quiz-score">
+                    <span>Score: <span id="quiz-score">0</span></span>
+                    <span>Streak: <span id="quiz-streak">0</span></span>
+                </div>
+                <div class="quiz-pokemon">
+                    <div id="quiz-image-container" class="quiz-image-container">
+                        <img id="quiz-pokemon-image" src="" alt="Mystery Pokémon" class="quiz-image silhouette">
+                    </div>
+                    <div class="quiz-options" id="quiz-options">
+                        <!-- Quiz options will be generated here -->
+                    </div>
+                </div>
+                <div class="quiz-actions">
+                    <button id="quiz-hint" class="action-btn secondary">💡 Hint</button>
+                    <button id="quiz-skip" class="action-btn secondary">⏭️ Skip</button>
+                    <button id="quiz-new-game" class="action-btn" onclick="startQuizGame()">🎮 New Game</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Move Set Display -->
+        <section id="moveset-display" class="moveset-display" style="display: none;">
+            <h3>⚡ Move Set & Abilities</h3>
+            <div class="moveset-container">
+                <div class="moves-section">
+                    <h4>Learnable Moves</h4>
+                    <div id="pokemon-moves" class="moves-grid">
+                        <p>Loading moves...</p>
+                    </div>
+                </div>
+                <div class="tms-section">
+                    <h4>TM/TR Compatible</h4>
+                    <div id="pokemon-tms" class="moves-grid">
+                        <p>Loading TMs...</p>
                     </div>
                 </div>
             </div>

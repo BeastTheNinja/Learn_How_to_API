@@ -1,0 +1,542 @@
+// =============================================================================
+// MODERN SCSS MIXINS - Mobile First Responsive Design + Utilities
+// =============================================================================
+
+@use 'sass:map';
+@use 'sass:math';
+@use 'sass:color';
+@use 'variables' as v;
+
+// =============================================================================
+// RESPONSIVE BREAKPOINT MIXINS - Mobile First Approach
+// =============================================================================
+
+/// Responsive breakpoint mixin - mobile first approach
+/// @param {String} $breakpoint - Breakpoint name from $breakpoints map
+/// @example
+///   @include breakpoint('md') {
+///     font-size: 1.2rem;
+///   }
+@mixin breakpoint($breakpoint) {
+  $size: map.get(v.$breakpoints, $breakpoint);
+  
+  @if $size {
+    @media (min-width: $size) {
+      @content;
+    }
+  } @else {
+    @error "Breakpoint '#{$breakpoint}' not found. Available breakpoints: #{map.keys(v.$breakpoints)}";
+  }
+}
+
+/// Max-width breakpoint mixin for desktop-first approach when needed
+/// @param {String} $breakpoint - Breakpoint name from $breakpoints map
+@mixin breakpoint-max($breakpoint) {
+  $size: map.get(v.$breakpoints, $breakpoint);
+  
+  @if $size {
+    @media (max-width: ($size - 1px)) {
+      @content;
+    }
+  } @else {
+    @error "Breakpoint '#{$breakpoint}' not found. Available breakpoints: #{map.keys(v.$breakpoints)}";
+  }
+}
+
+/// Between breakpoints mixin
+/// @param {String} $min - Minimum breakpoint name
+/// @param {String} $max - Maximum breakpoint name
+@mixin breakpoint-between($min, $max) {
+  $min-size: map.get(v.$breakpoints, $min);
+  $max-size: map.get(v.$breakpoints, $max);
+  
+  @if $min-size and $max-size {
+    @media (min-width: $min-size) and (max-width: ($max-size - 1px)) {
+      @content;
+    }
+  } @else {
+    @error "One or both breakpoints not found. Available: #{map.keys(v.$breakpoints)}";
+  }
+}
+
+/// Specific device targeting
+@mixin mobile-only {
+  @media (max-width: (map.get(v.$breakpoints, 'md') - 1px)) {
+    @content;
+  }
+}
+
+@mixin tablet-only {
+  @include breakpoint-between('md', 'lg') {
+    @content;
+  }
+}
+
+@mixin desktop-only {
+  @include breakpoint('lg') {
+    @content;
+  }
+}
+
+@mixin high-res {
+  @include breakpoint('2k') {
+    @content;
+  }
+}
+
+@mixin ultra-wide {
+  @include breakpoint('2k-ultra') {
+    @content;
+  }
+}
+
+// =============================================================================
+// LAYOUT MIXINS - Modern CSS Grid & Flexbox
+// =============================================================================
+
+/// Modern CSS Grid container
+/// @param {Number} $columns - Number of columns or auto-fit
+/// @param {String} $gap - Gap between grid items
+/// @param {String} $min-item-width - Minimum width for auto-fit columns
+@mixin grid-container($columns: auto-fit, $gap: map.get(v.$spacing, 6), $min-item-width: 250px) {
+  display: grid;
+  gap: $gap;
+  
+  @if $columns == auto-fit {
+    grid-template-columns: repeat(auto-fit, minmax($min-item-width, 1fr));
+  } @else if $columns == auto-fill {
+    grid-template-columns: repeat(auto-fill, minmax($min-item-width, 1fr));
+  } @else {
+    grid-template-columns: repeat($columns, 1fr);
+  }
+}
+
+/// Responsive grid that adapts to screen size
+@mixin responsive-grid($mobile: 1, $tablet: 2, $desktop: 3, $wide: 4) {
+  @include grid-container($mobile);
+  
+  @include breakpoint('md') {
+    grid-template-columns: repeat($tablet, 1fr);
+  }
+  
+  @include breakpoint('lg') {
+    grid-template-columns: repeat($desktop, 1fr);
+  }
+  
+  @include breakpoint('xl') {
+    grid-template-columns: repeat($wide, 1fr);
+  }
+}
+
+/// Flexbox container with common patterns
+/// @param {String} $direction - Flex direction
+/// @param {String} $justify - Justify content
+/// @param {String} $align - Align items
+/// @param {String} $wrap - Flex wrap
+/// @param {String} $gap - Gap between items
+@mixin flex-container(
+  $direction: row,
+  $justify: flex-start,
+  $align: stretch,
+  $wrap: nowrap,
+  $gap: 0
+) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+  flex-wrap: $wrap;
+  
+  @if $gap != 0 {
+    gap: $gap;
+  }
+}
+
+/// Center content both horizontally and vertically
+@mixin center-content {
+  @include flex-container(row, center, center);
+}
+
+/// Create a flex item that takes remaining space
+@mixin flex-grow($grow: 1) {
+  flex: $grow 1 0%;
+}
+
+// =============================================================================
+// VISUAL EFFECT MIXINS
+// =============================================================================
+
+/// Modern card styling with shadow and border radius
+/// @param {String} $padding - Internal padding
+/// @param {String} $radius - Border radius
+/// @param {String} $shadow - Box shadow
+@mixin card-style(
+  $padding: v.$card-padding,
+  $radius: v.$card-border-radius,
+  $shadow: v.$card-shadow
+) {
+  background-color: var(--bg-card);
+  border-radius: $radius;
+  box-shadow: $shadow;
+  padding: $padding;
+  border: 1px solid var(--border-color);
+  transition: map.get(v.$transitions, 'normal');
+  
+  &:hover {
+    box-shadow: var(--shadow-xl);
+    transform: translateY(-2px);
+  }
+}
+
+/// Glassmorphism effect
+/// @param {Number} $opacity - Background opacity
+/// @param {Number} $blur - Backdrop blur amount
+@mixin glassmorphism($opacity: 0.1, $blur: 10px) {
+  background: rgba(255, 255, 255, $opacity);
+  backdrop-filter: blur($blur);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/// Gradient background
+/// @param {String} $direction - Gradient direction
+/// @param {List} $colors - List of colors for gradient
+@mixin gradient-bg($direction: to right, $colors: (var(--color-primary), var(--color-secondary))) {
+  background: linear-gradient($direction, $colors);
+}
+
+/// Text gradient effect
+/// @param {List} $colors - List of colors for gradient
+@mixin text-gradient($colors: (var(--color-primary), var(--color-secondary))) {
+  background: linear-gradient(to right, $colors);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+// =============================================================================
+// ANIMATION MIXINS
+// =============================================================================
+
+/// Smooth transition for interactive elements
+/// @param {String} $property - CSS property to transition
+/// @param {String} $duration - Transition duration
+/// @param {String} $easing - Timing function
+@mixin smooth-transition($property: all, $duration: map.get(v.$transitions, 'normal'), $easing: ease-in-out) {
+  transition: $property $duration $easing;
+}
+
+/// Hover lift effect
+/// @param {String} $distance - How far to lift element
+@mixin hover-lift($distance: -4px) {
+  @include smooth-transition(transform);
+  
+  &:hover {
+    transform: translateY($distance);
+  }
+}
+
+/// Scale on hover
+/// @param {Number} $scale - Scale factor
+@mixin hover-scale($scale: 1.05) {
+  @include smooth-transition(transform);
+  
+  &:hover {
+    transform: scale($scale);
+  }
+}
+
+/// Pulse animation for loading states
+@mixin pulse-animation {
+  animation: map.get(v.$animations, 'pulse');
+}
+
+/// Spin animation for loading indicators
+@mixin spin-animation {
+  animation: map.get(v.$animations, 'spin');
+}
+
+// =============================================================================
+// BUTTON MIXINS
+// =============================================================================
+
+/// Modern button base styles
+/// @param {String} $size - Button size (sm, md, lg, xl)
+@mixin button-base($size: 'md') {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: map.get(v.$spacing, 2);
+  font-family: map.get(v.$font-families, 'primary');
+  font-weight: map.get(v.$font-weights, 'medium');
+  text-decoration: none;
+  white-space: nowrap;
+  border: none;
+  border-radius: map.get(v.$border-radius, 'lg');
+  cursor: pointer;
+  user-select: none;
+  @include smooth-transition();
+  
+  height: map.get(v.$button-height, $size);
+  padding: map.get(v.$button-padding, $size);
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+/// Primary button variant
+@mixin button-primary {
+  @include button-base();
+  background-color: var(--color-primary);
+  color: var(--text-on-dark);
+  
+  &:hover:not(:disabled) {
+    background-color: color.scale(#dc2626, $lightness: -10%);
+    @include hover-lift();
+  }
+  
+  &:active {
+    transform: translateY(0);
+    background-color: color.scale(#dc2626, $lightness: -20%);
+  }
+  
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--state-focus);
+  }
+}
+
+/// Secondary button variant
+@mixin button-secondary {
+  @include button-base();
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+  
+  &:hover:not(:disabled) {
+    background-color: var(--state-hover);
+    border-color: var(--color-primary);
+  }
+}
+
+/// Ghost button variant
+@mixin button-ghost {
+  @include button-base();
+  background-color: transparent;
+  color: var(--color-primary);
+  
+  &:hover:not(:disabled) {
+    background-color: var(--state-hover);
+  }
+}
+
+/// Icon-only button variant
+@mixin button-icon($size: 48px) {
+  @include button-base('sm');
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $size;
+  height: $size;
+  padding: 0;
+  border-radius: 50%;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: map.get(v.$transitions, 'normal');
+  
+  &:hover:not(:disabled) {
+    background-color: var(--state-hover);
+  }
+  
+  &:focus:not(:disabled) {
+    background-color: var(--state-focus);
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
+// =============================================================================
+// FORM MIXINS
+// =============================================================================
+
+/// Modern input field styling
+@mixin input-field {
+  display: block;
+  width: 100%;
+  height: v.$input-height;
+  padding: v.$input-padding;
+  font-family: map.get(v.$font-families, 'primary');
+  font-size: map.get(v.$font-sizes, 'base');
+  line-height: map.get(v.$line-heights, 'normal');
+  color: var(--text-primary);
+  background-color: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: v.$input-border-radius;
+  @include smooth-transition();
+  
+  &::placeholder {
+    color: var(--text-muted);
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: var(--state-focus);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: var(--bg-tertiary);
+  }
+}
+
+// =============================================================================
+// TYPOGRAPHY MIXINS
+// =============================================================================
+
+/// Responsive typography scaling
+/// @param {String} $base-size - Base font size
+/// @param {String} $large-size - Font size for larger screens
+@mixin responsive-text($base-size, $large-size: null) {
+  font-size: map.get(v.$font-sizes, $base-size);
+  
+  @if $large-size {
+    @include breakpoint('lg') {
+      font-size: map.get(v.$font-sizes, $large-size);
+    }
+  }
+}
+
+/// Heading styles with consistent spacing
+/// @param {String} $size - Font size key
+/// @param {String} $weight - Font weight key
+@mixin heading($size: '2xl', $weight: 'bold') {
+  font-family: map.get(v.$font-families, 'display');
+  font-weight: map.get(v.$font-weights, $weight);
+  line-height: map.get(v.$line-heights, 'tight');
+  color: var(--text-primary);
+  @include responsive-text($size);
+}
+
+/// Text truncation with ellipsis
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/// Multi-line text truncation
+/// @param {Number} $lines - Number of lines to show
+@mixin text-truncate-lines($lines: 3) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// =============================================================================
+// POKEMON-SPECIFIC MIXINS
+// =============================================================================
+
+/// Type badge styling with dynamic colors
+/// @param {String} $type - Pokemon type
+@mixin type-badge($type: null) {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: map.get(v.$border-radius, 'full');
+  font-size: map.get(v.$font-sizes, 'sm');
+  font-weight: map.get(v.$font-weights, 'semibold');
+  color: white;
+  text-transform: capitalize;
+  
+  @if $type {
+    background-color: map.get(v.$type-colors, $type);
+  }
+}
+
+/// Pokemon card container
+@mixin pokemon-card {
+  @include card-style();
+  overflow: hidden;
+  
+  .pokemon-image {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    @include smooth-transition(transform);
+  }
+  
+  &:hover .pokemon-image {
+    transform: scale(1.1);
+  }
+}
+
+/// Stats bar styling
+@mixin stat-bar {
+  width: 100%;
+  height: v.$stat-bar-height;
+  background-color: var(--bg-tertiary);
+  border-radius: map.get(v.$border-radius, 'full');
+  overflow: hidden;
+  
+  .stat-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--color-primary), var(--color-accent));
+    border-radius: inherit;
+    @include smooth-transition(width);
+  }
+}
+
+// =============================================================================
+// UTILITY MIXINS
+// =============================================================================
+
+/// Visually hide element but keep it accessible
+@mixin visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/// Clear floats
+@mixin clearfix {
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+/// Aspect ratio container
+/// @param {Number} $width - Aspect ratio width
+/// @param {Number} $height - Aspect ratio height
+@mixin aspect-ratio($width: 16, $height: 9) {
+  position: relative;
+  
+  &::before {
+    content: '';
+    display: block;
+    padding-top: math.percentage(math.div($height, $width));
+  }
+  
+  > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}

@@ -1,0 +1,387 @@
+// =============================================================================
+// MODERN CSS RESET - Based on Josh Comeau's CSS Reset + Pokédex customizations
+// =============================================================================
+
+@use 'sass:map';
+@use '../abstracts' as *;
+
+// =============================================================================
+// CUSTOM PROPERTIES KEYFRAMES - For smooth theme transitions
+// =============================================================================
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transform: translate3d(0, 0, 0);
+  }
+  40%, 43% {
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translate3d(0, -30px, 0);
+  }
+  70% {
+    animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+    transform: translate3d(0, -15px, 0);
+  }
+  90% {
+    transform: translate3d(0, -4px, 0);
+  }
+}
+
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+// =============================================================================
+// MODERN CSS RESET
+// =============================================================================
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  // Improve text rendering
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  
+  // Better font sizing
+  font-size: 100%;
+  
+  // Smooth scrolling
+  scroll-behavior: smooth;
+  
+  // Prevent horizontal scrolling
+  overflow-x: hidden;
+  
+  // Better focus indicators
+  &:focus-within {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  // Reset and base styles
+  line-height: line-height('normal');
+  font-family: map.get($font-families, 'primary');
+  font-size: font-size('base');
+  font-weight: font-weight('normal');
+  
+  // Color scheme
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  
+  // Better text rendering
+  text-rendering: optimizeSpeed;
+  
+  // Prevent font inflation
+  -webkit-text-size-adjust: 100%;
+  
+  // Smooth transitions for theme changes
+  transition: 
+    color map.get($transitions, 'normal'),
+    background-color map.get($transitions, 'normal');
+  
+  // Prevent horizontal scroll
+  overflow-x: hidden;
+  
+  // Minimum height
+  min-height: 100vh;
+  min-height: 100dvh; // Dynamic viewport height for mobile
+}
+
+// =============================================================================
+// MEDIA ELEMENTS
+// =============================================================================
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+// Better image loading
+img {
+  border-style: none;
+  
+  // Prevent dragging
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+}
+
+// =============================================================================
+// FORM ELEMENTS
+// =============================================================================
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
+button {
+  cursor: pointer;
+  
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+input[type="search"] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+// Remove default focus styles - we'll add our own
+input:focus,
+button:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+}
+
+// =============================================================================
+// TEXT ELEMENTS
+// =============================================================================
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: map.get($font-families, 'display');
+  font-weight: font-weight('bold');
+  line-height: line-height('tight');
+  color: var(--text-primary);
+  margin: 0;
+  
+  // Better spacing
+  + * {
+    margin-top: spacing(4);
+  }
+}
+
+p {
+  line-height: line-height('relaxed');
+  color: var(--text-secondary);
+  
+  // Better spacing
+  + * {
+    margin-top: spacing(4);
+  }
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color map.get($transitions, 'fast');
+  
+  &:hover {
+    color: darken-color(#dc2626, 10%);
+    text-decoration: underline;
+  }
+  
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: border-radius('sm');
+  }
+}
+
+strong,
+b {
+  font-weight: font-weight('semibold');
+}
+
+em,
+i {
+  font-style: italic;
+}
+
+small {
+  font-size: font-size('sm');
+}
+
+// =============================================================================
+// LIST ELEMENTS
+// =============================================================================
+
+ul,
+ol {
+  list-style: none;
+}
+
+// =============================================================================
+// TABLE ELEMENTS
+// =============================================================================
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+}
+
+td,
+th {
+  text-align: left;
+  vertical-align: top;
+  padding: spacing(2) spacing(4);
+  border-bottom: 1px solid var(--border-color);
+}
+
+th {
+  font-weight: font-weight('semibold');
+  color: var(--text-primary);
+  background-color: var(--bg-secondary);
+}
+
+// =============================================================================
+// ACCESSIBILITY IMPROVEMENTS
+// =============================================================================
+
+// Respect user's motion preferences
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+// High contrast mode improvements
+@media (prefers-contrast: high) {
+  :root {
+    --border-color: #000000;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
+  }
+}
+
+// Dark mode preference
+@media (prefers-color-scheme: dark) {
+  :root:not(.light-mode) {
+    --bg-primary: #{gray(900)};
+    --bg-secondary: #{gray(800)};
+    --bg-tertiary: #{gray(700)};
+    --bg-card: #{gray(800)};
+    --bg-overlay: rgba(0, 0, 0, 0.8);
+    
+    --text-primary: #{gray(50)};
+    --text-secondary: #{gray(300)};
+    --text-muted: #{gray(400)};
+    
+    --border-color: #{gray(600)};
+    --state-hover: rgba(255, 255, 255, 0.05);
+    --state-active: rgba(255, 255, 255, 0.1);
+  }
+}
+
+// =============================================================================
+// UTILITY CLASSES
+// =============================================================================
+
+// Screen reader only content
+.sr-only {
+  @include visually-hidden();
+}
+
+// Skip link for keyboard navigation
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--bg-card);
+  color: var(--text-primary);
+  padding: spacing(2) spacing(4);
+  text-decoration: none;
+  border-radius: border-radius('md');
+  z-index: z-index('modal');
+  transition: top map.get($transitions, 'fast');
+  
+  &:focus {
+    top: 6px;
+  }
+}
+
+// Focus visible improvements
+.focus-visible {
+  &:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: border-radius('sm');
+  }
+}
+
+// =============================================================================
+// PRINT STYLES
+// =============================================================================
+
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+  
+  a[href]::after {
+    content: " (" attr(href) ")";
+  }
+  
+  img {
+    page-break-inside: avoid;
+  }
+  
+  h1,
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+}

@@ -1,0 +1,423 @@
+// =============================================================================
+// LAYOUT - Main structure and responsive containers
+// =============================================================================
+
+@use 'sass:map';
+@use '../abstracts' as *;
+
+// =============================================================================
+// CONTAINER SYSTEM - Responsive containers with modern CSS
+// =============================================================================
+
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: spacing(4);
+  padding-right: spacing(4);
+  
+  // Responsive max-widths
+  @include breakpoint('sm') {
+    max-width: container-width('sm');
+    padding-left: spacing(6);
+    padding-right: spacing(6);
+  }
+  
+  @include breakpoint('md') {
+    max-width: container-width('md');
+  }
+  
+  @include breakpoint('lg') {
+    max-width: container-width('lg');
+  }
+  
+  @include breakpoint('xl') {
+    max-width: container-width('xl');
+  }
+  
+  @include breakpoint('xxl') {
+    max-width: container-width('xxl');
+  }
+  
+  @include breakpoint('2k') {
+    max-width: container-width('2k');
+    padding-left: spacing(8);
+    padding-right: spacing(8);
+  }
+  
+  @include breakpoint('2k-ultra') {
+    max-width: container-width('2k-ultra');
+    padding-left: spacing(12);
+    padding-right: spacing(12);
+  }
+}
+
+// Fluid container (no max-width)
+.container-fluid {
+  width: 100%;
+  padding-left: spacing(4);
+  padding-right: spacing(4);
+  
+  @include breakpoint('md') {
+    padding-left: spacing(6);
+    padding-right: spacing(6);
+  }
+  
+  @include breakpoint('2k') {
+    padding-left: spacing(8);
+    padding-right: spacing(8);
+  }
+}
+
+// =============================================================================
+// MAIN LAYOUT STRUCTURE
+// =============================================================================
+
+// Body layout
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+// Main content wrapper
+main {
+  flex: 1;
+  width: 100%;
+  
+  // Add some breathing room
+  padding-top: spacing(4);
+  padding-bottom: spacing(8);
+  
+  @include breakpoint('md') {
+    padding-top: spacing(6);
+    padding-bottom: spacing(12);
+  }
+}
+
+// =============================================================================
+// HEADER LAYOUT
+// =============================================================================
+
+header {
+  position: relative;
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: var(--text-on-dark);
+  padding: spacing(8) 0;
+  text-align: center;
+  overflow: hidden;
+  
+  @include breakpoint('md') {
+    padding: spacing(12) 0;
+  }
+  
+  @include breakpoint('lg') {
+    padding: spacing(16) 0;
+  }
+  
+  // Decorative background pattern
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+  
+  // Content positioning
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+  
+  h1 {
+    font-size: font-size('4xl');
+    font-weight: font-weight('black');
+    margin-bottom: spacing(4);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    
+    @include breakpoint('md') {
+      font-size: font-size('6xl');
+    }
+    
+    @include breakpoint('lg') {
+      font-size: font-size('7xl');
+    }
+    
+    @include breakpoint('2k') {
+      font-size: font-size('8xl');
+    }
+  }
+  
+  p {
+    font-size: font-size('lg');
+    opacity: 0.9;
+    max-width: 600px;
+    margin: 0 auto;
+    
+    @include breakpoint('md') {
+      font-size: font-size('xl');
+    }
+    
+    @include breakpoint('lg') {
+      font-size: font-size('2xl');
+    }
+  }
+}
+
+// =============================================================================
+// FOOTER LAYOUT
+// =============================================================================
+
+footer {
+  margin-top: auto;
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  padding: spacing(8) 0;
+  text-align: center;
+  
+  @include breakpoint('md') {
+    padding: spacing(12) 0;
+  }
+  
+  p {
+    color: var(--text-muted);
+    font-size: font-size('sm');
+    margin: 0;
+    
+    @include breakpoint('md') {
+      font-size: font-size('base');
+    }
+  }
+}
+
+// =============================================================================
+// SECTION LAYOUTS
+// =============================================================================
+
+// Generic section spacing
+section {
+  margin-bottom: spacing(8);
+  
+  @include breakpoint('md') {
+    margin-bottom: spacing(12);
+  }
+  
+  @include breakpoint('lg') {
+    margin-bottom: spacing(16);
+  }
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+// Two-column layout for larger screens
+.section-two-column {
+  @include breakpoint('lg') {
+    @include grid-container(2, spacing(8));
+    align-items: start;
+  }
+}
+
+// Three-column layout
+.section-three-column {
+  @include breakpoint('md') {
+    @include grid-container(2, spacing(6));
+  }
+  
+  @include breakpoint('lg') {
+    @include grid-container(3, spacing(8));
+  }
+}
+
+// =============================================================================
+// GRID LAYOUTS
+// =============================================================================
+
+// Pokemon grid - responsive grid for Pokemon cards
+.pokemon-grid {
+  gap: spacing(6);
+  @include responsive-grid(1, 2, 3, 4);
+  
+  @include breakpoint('2k') {
+    grid-template-columns: repeat(5, 1fr);
+    gap: spacing(8);
+  }
+  
+  @include breakpoint('2k-ultra') {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+// Stats grid - for displaying Pokemon stats
+.stats-grid {
+  @include grid-container(1, spacing(3));
+  
+  @include breakpoint('sm') {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @include breakpoint('md') {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// Gaming features grid
+.gaming-grid {
+  gap: spacing(4);
+  @include responsive-grid(1, 2, 3, 4);
+  
+  @include breakpoint('md') {
+    gap: spacing(6);
+  }
+}
+
+// Type effectiveness grid
+.effectiveness-grid {
+  @include grid-container(1, spacing(4));
+  
+  @include breakpoint('md') {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  @include breakpoint('lg') {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+// =============================================================================
+// FLEX LAYOUTS
+// =============================================================================
+
+// Navigation flex container
+.nav-flex {
+  @include flex-container(row, space-between, center);
+  flex-wrap: wrap;
+  gap: spacing(4);
+  
+  @include mobile-only {
+    flex-direction: column;
+  }
+}
+
+// Button group flex
+.button-group {
+  @include flex-container(row, flex-start, center);
+  flex-wrap: wrap;
+  gap: spacing(3);
+  
+  @include mobile-only {
+    flex-direction: column;
+    width: 100%;
+    
+    > * {
+      width: 100%;
+    }
+  }
+}
+
+// Centered content
+.content-center {
+  @include center-content();
+  min-height: 50vh;
+  text-align: center;
+}
+
+// Space between layout
+.space-between {
+  @include flex-container(row, space-between, center);
+  
+  @include mobile-only {
+    flex-direction: column;
+    gap: spacing(4);
+  }
+}
+
+// =============================================================================
+// RESPONSIVE UTILITIES
+// =============================================================================
+
+// Hide elements at specific breakpoints
+.hide-mobile {
+  @include mobile-only {
+    display: none !important;
+  }
+}
+
+.hide-tablet {
+  @include tablet-only {
+    display: none !important;
+  }
+}
+
+.hide-desktop {
+  @include desktop-only {
+    display: none !important;
+  }
+}
+
+// Show only at specific breakpoints
+.show-mobile {
+  display: block;
+  
+  @include breakpoint('md') {
+    display: none !important;
+  }
+}
+
+.show-tablet {
+  display: none;
+  
+  @include tablet-only {
+    display: block !important;
+  }
+}
+
+.show-desktop {
+  display: none;
+  
+  @include desktop-only {
+    display: block !important;
+  }
+}
+
+// =============================================================================
+// SPACING UTILITIES
+// =============================================================================
+
+// Margin utilities
+@each $key, $value in $spacing {
+  .m-#{$key} { margin: $value; }
+  .mt-#{$key} { margin-top: $value; }
+  .mr-#{$key} { margin-right: $value; }
+  .mb-#{$key} { margin-bottom: $value; }
+  .ml-#{$key} { margin-left: $value; }
+  .mx-#{$key} { margin-left: $value; margin-right: $value; }
+  .my-#{$key} { margin-top: $value; margin-bottom: $value; }
+}
+
+// Padding utilities
+@each $key, $value in $spacing {
+  .p-#{$key} { padding: $value; }
+  .pt-#{$key} { padding-top: $value; }
+  .pr-#{$key} { padding-right: $value; }
+  .pb-#{$key} { padding-bottom: $value; }
+  .pl-#{$key} { padding-left: $value; }
+  .px-#{$key} { padding-left: $value; padding-right: $value; }
+  .py-#{$key} { padding-top: $value; padding-bottom: $value; }
+}
+
+// Gap utilities for flexbox and grid
+@each $key, $value in $spacing {
+  .gap-#{$key} { gap: $value; }
+  .gap-x-#{$key} { column-gap: $value; }
+  .gap-y-#{$key} { row-gap: $value; }
+}

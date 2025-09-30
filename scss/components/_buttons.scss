@@ -1,0 +1,509 @@
+// =============================================================================
+// BUTTON COMPONENTS - Modern Pokemon-themed buttons
+// =============================================================================
+
+@use 'sass:map';
+@use '../abstracts' as *;
+
+// =============================================================================
+// BASE BUTTON STYLES
+// =============================================================================
+
+.btn,
+button {
+  @include button-base();
+  
+  // Icon support
+  svg, .icon {
+    width: 1em;
+    height: 1em;
+    flex-shrink: 0;
+  }
+  
+  // Loading state
+  &.loading {
+    pointer-events: none;
+    position: relative;
+    color: transparent;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 1rem;
+      height: 1rem;
+      margin: -0.5rem 0 0 -0.5rem;
+      border: 2px solid transparent;
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
+}
+
+// =============================================================================
+// BUTTON VARIANTS
+// =============================================================================
+
+// Primary button - Main Pokemon red
+.btn-primary {
+  @include button-primary();
+}
+
+// Secondary button - Outlined style
+.btn-secondary {
+  @include button-secondary();
+}
+
+// Ghost button - Transparent style
+.btn-ghost {
+  @include button-ghost();
+}
+
+// Pokemon-themed button variants
+.btn-electric {
+  background: linear-gradient(135deg, get-type-color('electric'), lighten-color(get-type-color('electric'), 10%));
+  color: var(--text-primary);
+  
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, darken-color(get-type-color('electric'), 5%), get-type-color('electric'));
+    @include hover-lift();
+  }
+}
+
+.btn-water {
+  background: linear-gradient(135deg, get-type-color('water'), lighten-color(get-type-color('water'), 10%));
+  color: var(--text-on-dark);
+  
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, darken-color(get-type-color('water'), 5%), get-type-color('water'));
+    @include hover-lift();
+  }
+}
+
+.btn-fire {
+  background: linear-gradient(135deg, get-type-color('fire'), lighten-color(get-type-color('fire'), 10%));
+  color: var(--text-on-dark);
+  
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, darken-color(get-type-color('fire'), 5%), get-type-color('fire'));
+    @include hover-lift();
+  }
+}
+
+.btn-grass {
+  background: linear-gradient(135deg, get-type-color('grass'), lighten-color(get-type-color('grass'), 10%));
+  color: var(--text-on-dark);
+  
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, darken-color(get-type-color('grass'), 5%), get-type-color('grass'));
+    @include hover-lift();
+  }
+}
+
+// Success/Error states
+.btn-success {
+  background-color: var(--color-success);
+  color: var(--text-on-dark);
+  
+  &:hover:not(:disabled) {
+    background-color: darken-color(#059669, 10%);
+    @include hover-lift();
+  }
+}
+
+.btn-error {
+  background-color: var(--color-error);
+  color: var(--text-on-dark);
+  
+  &:hover:not(:disabled) {
+    background-color: darken-color(#dc2626, 10%);
+    @include hover-lift();
+  }
+}
+
+.btn-warning {
+  background-color: var(--color-warning);
+  color: var(--text-on-dark);
+  
+  &:hover:not(:disabled) {
+    background-color: darken-color(#d97706, 10%);
+    @include hover-lift();
+  }
+}
+
+// =============================================================================
+// BUTTON SIZES
+// =============================================================================
+
+.btn-sm {
+  height: map.get($button-height, 'sm');
+  padding: map.get($button-padding, 'sm');
+  font-size: font-size('sm');
+}
+
+.btn-md {
+  height: map.get($button-height, 'md');
+  padding: map.get($button-padding, 'md');
+  font-size: font-size('base');
+}
+
+.btn-lg {
+  height: map.get($button-height, 'lg');
+  padding: map.get($button-padding, 'lg');
+  font-size: font-size('lg');
+}
+
+.btn-xl {
+  height: map.get($button-height, 'xl');
+  padding: map.get($button-padding, 'xl');
+  font-size: font-size('xl');
+}
+
+// =============================================================================
+// SPECIAL BUTTON STYLES
+// =============================================================================
+
+// Floating Action Button
+.btn-fab {
+  position: fixed;
+  bottom: spacing(6);
+  right: spacing(6);
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  box-shadow: var(--shadow-lg);
+  z-index: z-index('fixed');
+  
+  @include hover-lift(-8px);
+  
+  @include breakpoint('md') {
+    width: 4rem;
+    height: 4rem;
+    bottom: spacing(8);
+    right: spacing(8);
+  }
+}
+
+// Icon-only buttons
+.btn-icon {
+  aspect-ratio: 1;
+  padding: 0;
+  
+  &.btn-sm {
+    width: map.get($button-height, 'sm');
+  }
+  
+  &.btn-md {
+    width: map.get($button-height, 'md');
+  }
+  
+  &.btn-lg {
+    width: map.get($button-height, 'lg');
+  }
+  
+  &.btn-xl {
+    width: map.get($button-height, 'xl');
+  }
+}
+
+// Rounded buttons
+.btn-rounded {
+  border-radius: border-radius('full');
+}
+
+// Wide buttons
+.btn-wide {
+  padding-left: spacing(8);
+  padding-right: spacing(8);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+// =============================================================================
+// BUTTON GROUPS
+// =============================================================================
+
+.btn-group {
+  @include flex-container(row, flex-start, center);
+  
+  .btn {
+    border-radius: 0;
+    margin-left: -1px;
+    
+    &:first-child {
+      border-radius: border-radius('lg') 0 0 border-radius('lg');
+      margin-left: 0;
+    }
+    
+    &:last-child {
+      border-radius: 0 border-radius('lg') border-radius('lg') 0;
+    }
+    
+    &:only-child {
+      border-radius: border-radius('lg');
+    }
+    
+    &:hover,
+    &:focus {
+      z-index: 1;
+    }
+  }
+  
+  // Vertical button group
+  &.btn-group-vertical {
+    flex-direction: column;
+    
+    .btn {
+      width: 100%;
+      margin-left: 0;
+      margin-top: -1px;
+      
+      &:first-child {
+        border-radius: border-radius('lg') border-radius('lg') 0 0;
+        margin-top: 0;
+      }
+      
+      &:last-child {
+        border-radius: 0 0 border-radius('lg') border-radius('lg');
+      }
+      
+      &:only-child {
+        border-radius: border-radius('lg');
+      }
+    }
+  }
+}
+
+// =============================================================================
+// GAMING FEATURE BUTTONS
+// =============================================================================
+
+.gaming-btn {
+  @include button-base();
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  position: relative;
+  overflow: hidden;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+  }
+  
+  &:hover:not(:disabled) {
+    border-color: var(--color-primary);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    
+    &::before {
+      left: 100%;
+    }
+  }
+  
+  &.active {
+    background: linear-gradient(135deg, var(--color-primary), darken-color(#dc2626, 5%));
+    color: var(--text-on-dark);
+    border-color: var(--color-primary);
+  }
+}
+
+// Theme toggle button
+.theme-toggle {
+  @include button-icon();
+  position: fixed;
+  top: spacing(4);
+  right: spacing(4);
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  color: var(--text-primary);
+  z-index: z-index('fixed');
+  font-size: font-size('lg');
+  
+  @include hover-lift();
+  
+  @include breakpoint('md') {
+    top: spacing(6);
+    right: spacing(6);
+    font-size: font-size('xl');
+  }
+  
+  .theme-icon {
+    transition: transform map.get($transitions, 'normal');
+  }
+  
+  &:hover .theme-icon {
+    transform: rotate(180deg);
+  }
+}
+
+// Quick action buttons (Pokemon suggestions)
+.quick-btn {
+  @include button-base('sm');
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: font-size('xs');
+  
+  @include hover-scale(1.05);
+  
+  @include breakpoint('md') {
+    font-size: font-size('sm');
+  }
+  
+  &:hover:not(:disabled) {
+    background: var(--state-hover);
+    border-color: var(--color-primary);
+  }
+}
+
+// Action buttons in Pokemon cards
+.action-btn {
+  @include button-primary();
+  
+  &.secondary {
+    @include button-secondary();
+  }
+  
+  &.random {
+    background: linear-gradient(135deg, get-type-color('psychic'), lighten-color(get-type-color('psychic'), 10%));
+    
+    &:hover:not(:disabled) {
+      background: linear-gradient(135deg, darken-color(get-type-color('psychic'), 5%), get-type-color('psychic'));
+    }
+  }
+  
+  &.surprise {
+    background: linear-gradient(135deg, get-type-color('fairy'), lighten-color(get-type-color('fairy'), 10%));
+    
+    &:hover:not(:disabled) {
+      background: linear-gradient(135deg, darken-color(get-type-color('fairy'), 5%), get-type-color('fairy'));
+    }
+  }
+}
+
+// Search button
+.search-btn {
+  @include button-primary();
+  border-radius: 0 border-radius('lg') border-radius('lg') 0;
+  height: $input-height;
+  padding: 0 spacing(4);
+  
+  @include breakpoint('md') {
+    padding: 0 spacing(6);
+  }
+}
+
+// Favorite button
+.favorite-btn {
+  @include button-ghost();
+  border: 2px solid var(--border-color);
+  
+  .heart-icon {
+    transition: transform map.get($transitions, 'normal');
+  }
+  
+  &:hover:not(:disabled) {
+    border-color: var(--color-error);
+    color: var(--color-error);
+    
+    .heart-icon {
+      transform: scale(1.2);
+    }
+  }
+  
+  &.favorited {
+    background-color: var(--color-error);
+    color: var(--text-on-dark);
+    border-color: var(--color-error);
+    
+    .heart-icon {
+      color: var(--text-on-dark);
+    }
+  }
+}
+
+// =============================================================================
+// RESPONSIVE ADJUSTMENTS
+// =============================================================================
+
+@include mobile-only {
+  .btn:not(.btn-sm):not(.btn-icon) {
+    padding: map.get($button-padding, 'md');
+    height: map.get($button-height, 'md');
+  }
+  
+  .btn-group {
+    flex-direction: column;
+    width: 100%;
+    
+    .btn {
+      width: 100%;
+      margin-left: 0;
+      margin-top: -1px;
+      
+      &:first-child {
+        border-radius: border-radius('lg') border-radius('lg') 0 0;
+        margin-top: 0;
+      }
+      
+      &:last-child {
+        border-radius: 0 0 border-radius('lg') border-radius('lg');
+      }
+    }
+  }
+}
+
+// High resolution adjustments
+@include high-res {
+  .btn {
+    font-size: font-size('lg');
+    padding: spacing(4) spacing(8);
+  }
+  
+  .btn-sm {
+    font-size: font-size('base');
+    padding: spacing(3) spacing(6);
+  }
+  
+  .btn-lg {
+    font-size: font-size('xl');
+    padding: spacing(5) spacing(10);
+  }
+}
+
+// =============================================================================
+// DARK MODE ADJUSTMENTS
+// =============================================================================
+
+:root.dark-mode {
+  .gaming-btn {
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+    
+    &::before {
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    }
+  }
+  
+  .quick-btn {
+    background: var(--bg-secondary);
+    
+    &:hover:not(:disabled) {
+      background: var(--bg-tertiary);
+    }
+  }
+  
+  .theme-toggle {
+    background: var(--bg-secondary);
+  }
+}

@@ -1,0 +1,477 @@
+// =============================================================================
+// POKEMON PAGE STYLES - Specific styles for the Pokemon Explorer page
+// =============================================================================
+
+@use 'sass:map';
+@use '../abstracts' as *;
+
+// =============================================================================
+// PAGE LAYOUT
+// =============================================================================
+
+.pokemon-explorer-page {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  
+  // Enhanced background pattern
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(circle at 25% 25%, rgba(220, 38, 38, 0.03) 0%, transparent 25%),
+      radial-gradient(circle at 75% 75%, rgba(37, 99, 235, 0.03) 0%, transparent 25%),
+      radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.02) 0%, transparent 25%);
+    pointer-events: none;
+    z-index: -1;
+  }
+}
+
+// =============================================================================
+// CONTROLS SECTION
+// =============================================================================
+
+.controls {
+  @include card-style();
+  margin-bottom: spacing(8);
+  
+  h2 {
+    text-align: center;
+    margin-bottom: spacing(6);
+    @include text-gradient();
+  }
+  
+  .search-options {
+    max-width: 800px;
+    margin: 0 auto;
+    
+    .search-group {
+      margin-bottom: spacing(6);
+      
+      label {
+        text-align: center;
+        display: block;
+        margin-bottom: spacing(3);
+        font-weight: font-weight('semibold');
+        color: var(--text-primary);
+        
+        @include breakpoint('md') {
+          font-size: font-size('lg');
+        }
+      }
+    }
+    
+    .action-buttons {
+      @include flex-container(row, center, center);
+      gap: spacing(4);
+      flex-wrap: wrap;
+      
+      @include mobile-only {
+        flex-direction: column;
+        
+        .action-btn {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+// =============================================================================
+// POKEMON DISPLAY SECTION
+// =============================================================================
+
+.pokemon-display {
+  margin-bottom: spacing(8);
+  
+  // Loading state
+  &.loading {
+    @include center-content();
+    min-height: 400px;
+    
+    .enhanced-loader {
+      padding: spacing(12);
+    }
+  }
+  
+  // Error state
+  .error-message {
+    @include card-style();
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.1), rgba(220, 38, 38, 0.05));
+    border: 2px solid rgba(220, 38, 38, 0.2);
+    
+    .error-icon {
+      font-size: font-size('4xl');
+      margin-bottom: spacing(4);
+    }
+    
+    h3 {
+      color: var(--color-error);
+      margin-bottom: spacing(4);
+    }
+    
+    p {
+      margin-bottom: spacing(6);
+      color: var(--text-secondary);
+    }
+    
+    .error-suggestions {
+      @include flex-container(row, center, center);
+      gap: spacing(3);
+      flex-wrap: wrap;
+      
+      .suggestion-btn {
+        @include button-secondary();
+        font-size: font-size('sm');
+      }
+    }
+  }
+}
+
+// =============================================================================
+// WELCOME STATE
+// =============================================================================
+
+.welcome-message {
+  background: linear-gradient(135deg, var(--bg-card), var(--bg-secondary));
+  border: 2px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+  
+  // Animated background elements
+  &::before {
+    content: '⚡ 🔥 💧 🌿 ⭐';
+    position: absolute;
+    top: 20%;
+    left: -100%;
+    font-size: font-size('6xl');
+    opacity: 0.1;
+    animation: float-across 20s linear infinite;
+    white-space: nowrap;
+  }
+  
+  &::after {
+    content: '🎮 ⚔️ 🏆 ✨ 🎯';
+    position: absolute;
+    bottom: 20%;
+    right: -100%;
+    font-size: font-size('4xl');
+    opacity: 0.1;
+    animation: float-across-reverse 25s linear infinite;
+    white-space: nowrap;
+  }
+  
+  // Content positioning
+  > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+@keyframes float-across {
+  from {
+    left: -100%;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+@keyframes float-across-reverse {
+  from {
+    right: -100%;
+  }
+  to {
+    right: 100%;
+  }
+}
+
+// =============================================================================
+// DYNAMIC CONTENT SECTIONS
+// =============================================================================
+
+// Gaming features container
+.gaming-features {
+  margin-bottom: spacing(8);
+  
+  .feature-section {
+    margin-bottom: spacing(6);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all map.get($transitions, 'slow');
+    
+    &.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Responsive content hiding
+.content-section {
+  margin-bottom: spacing(8);
+  
+  &.hidden {
+    display: none;
+  }
+  
+  &.animate-in {
+    animation: slideInUp 0.5s ease-out;
+  }
+  
+  &.animate-out {
+    animation: slideOutDown 0.3s ease-in;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+}
+
+// =============================================================================
+// SPECIAL STATES
+// =============================================================================
+
+// Shiny mode indicator
+.shiny-mode-active {
+  .pokemon-card {
+    background: linear-gradient(135deg, 
+      rgba(251, 191, 36, 0.1), 
+      rgba(251, 191, 36, 0.05)
+    );
+    border: 2px solid rgba(251, 191, 36, 0.3);
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.2);
+    
+    .pokemon-image {
+      filter: hue-rotate(180deg) saturate(1.5);
+    }
+  }
+  
+  body::before {
+    content: '✨';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    font-size: font-size('9xl');
+    opacity: 0.1;
+    transform: translate(-50%, -50%);
+    animation: sparkle 3s ease-in-out infinite;
+    pointer-events: none;
+    z-index: -1;
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    opacity: 0.1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+// =============================================================================
+// SCROLL ENHANCEMENTS
+// =============================================================================
+
+// Smooth scroll behavior
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+// Scroll indicators
+.scroll-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+  z-index: z-index('fixed');
+}
+
+// Parallax elements
+.parallax-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 120%;
+  background: linear-gradient(45deg, 
+    rgba(220, 38, 38, 0.02) 0%, 
+    rgba(37, 99, 235, 0.02) 50%, 
+    rgba(251, 191, 36, 0.02) 100%
+  );
+  z-index: -2;
+  will-change: transform;
+}
+
+// =============================================================================
+// RESPONSIVE PAGE ADJUSTMENTS
+// =============================================================================
+
+@include mobile-only {
+  .controls {
+    margin: spacing(4) spacing(2) spacing(6);
+    padding: spacing(4);
+  }
+  
+  .pokemon-display {
+    margin: 0 spacing(2) spacing(6);
+  }
+  
+  .gaming-features {
+    margin: 0 spacing(2);
+  }
+  
+  .welcome-message {
+    margin: 0 spacing(2);
+    
+    &::before,
+    &::after {
+      display: none; // Hide animations on mobile for performance
+    }
+  }
+}
+
+@include tablet-only {
+  .controls {
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@include desktop-only {
+  .pokemon-display {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+@include high-res {
+  .controls {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .pokemon-display {
+    max-width: 1600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .gaming-features {
+    max-width: 1400px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+// =============================================================================
+// PRINT STYLES FOR PAGE
+// =============================================================================
+
+@media print {
+  .pokemon-explorer-page {
+    background: white !important;
+    
+    &::before {
+      display: none !important;
+    }
+  }
+  
+  .controls,
+  .gaming-features {
+    display: none !important;
+  }
+  
+  .pokemon-card {
+    box-shadow: none !important;
+    border: 2px solid #000 !important;
+    page-break-inside: avoid;
+  }
+  
+  .pokemon-actions {
+    display: none !important;
+  }
+}
+
+// =============================================================================
+// ACCESSIBILITY ENHANCEMENTS
+// =============================================================================
+
+// High contrast mode
+@media (prefers-contrast: high) {
+  .pokemon-card {
+    border: 3px solid var(--text-primary);
+  }
+  
+  .type-badge {
+    border: 2px solid var(--text-primary);
+  }
+  
+  .welcome-message {
+    border: 3px solid var(--border-color);
+  }
+}
+
+// Reduced motion preferences
+@media (prefers-reduced-motion: reduce) {
+  .welcome-message {
+    &::before,
+    &::after {
+      animation: none !important;
+    }
+  }
+  
+  .content-section {
+    &.animate-in,
+    &.animate-out {
+      animation: none !important;
+    }
+  }
+  
+  .shiny-mode-active body::before {
+    animation: none !important;
+  }
+  
+  .enhanced-loader .pokeball-advanced {
+    animation: none !important;
+  }
+}

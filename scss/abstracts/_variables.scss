@@ -1,0 +1,277 @@
+// =============================================================================
+// MODERN SCSS VARIABLES - Using CSS Custom Properties + Sass Variables
+// =============================================================================
+
+@use 'sass:math';
+@use 'sass:map';
+@use 'sass:color';
+
+// =============================================================================
+// BREAKPOINTS - Mobile First Approach (Perfect for small devices to 2K)
+// =============================================================================
+
+$breakpoints: (
+  'xs': 320px,    // Extra small devices (old phones)
+  'sm': 576px,    // Small devices (phones)
+  'md': 768px,    // Medium devices (tablets)
+  'lg': 992px,    // Large devices (small laptops)
+  'xl': 1200px,   // Extra large devices (laptops)
+  'xxl': 1400px,  // Extra extra large (large laptops)
+  '2k': 1920px,   // 2K screens
+  '2k-ultra': 2560px // Ultra-wide 2K screens
+) !default;
+
+// =============================================================================
+// COLOR SYSTEM - Modern Pokémon Theme with CSS Custom Properties
+// =============================================================================
+
+// Primary Pokémon colors
+$pokemon-red: #dc2626;
+$pokemon-blue: #2563eb;
+$pokemon-yellow: #facc15;
+$electric-yellow: #fbbf24;
+
+// Type-based color palette
+$type-colors: (
+  'normal': #a8a878,
+  'fire': #f08030,
+  'water': #6890f0,
+  'electric': #f8d030,
+  'grass': #78c850,
+  'ice': #98d8d8,
+  'fighting': #c03028,
+  'poison': #a040a0,
+  'ground': #e0c068,
+  'flying': #a890f0,
+  'psychic': #f85888,
+  'bug': #a8b820,
+  'rock': #b8a038,
+  'ghost': #705898,
+  'dragon': #7038f8,
+  'dark': #705848,
+  'steel': #b8b8d0,
+  'fairy': #ee99ac
+) !default;
+
+// Modern neutral palette
+$gray-palette: (
+  50: #f9fafb,
+  100: #f3f4f6,
+  200: #e5e7eb,
+  300: #d1d5db,
+  400: #9ca3af,
+  500: #6b7280,
+  600: #4b5563,
+  700: #374151,
+  800: #1f2937,
+  900: #111827,
+  950: #030712
+) !default;
+
+// CSS Custom Properties Root
+:root {
+  // Color scheme variables
+  --color-primary: #{$pokemon-red};
+  --color-secondary: #{$pokemon-blue};
+  --color-accent: #{$pokemon-yellow};
+  --color-electric: #{$electric-yellow};
+  
+  // Background system
+  --bg-primary: #{map.get($gray-palette, 50)};
+  --bg-secondary: #{map.get($gray-palette, 100)};
+  --bg-tertiary: #{map.get($gray-palette, 200)};
+  --bg-card: #ffffff;
+  --bg-overlay: rgba(0, 0, 0, 0.5);
+  
+  // Text colors
+  --text-primary: #{map.get($gray-palette, 900)};
+  --text-secondary: #{map.get($gray-palette, 600)};
+  --text-muted: #{map.get($gray-palette, 500)};
+  --text-on-dark: #ffffff;
+  
+  // Border and shadow system
+  --border-color: #{map.get($gray-palette, 300)};
+  --border-focus: var(--color-primary);
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  
+  // Interactive states
+  --state-hover: rgba(0, 0, 0, 0.05);
+  --state-active: rgba(0, 0, 0, 0.1);
+  --state-focus: 0 0 0 3px rgba(220, 38, 38, 0.1);
+  
+  // Success, warning, error colors
+  --color-success: #059669;
+  --color-warning: #d97706;
+  --color-error: #dc2626;
+  --color-info: #0ea5e9;
+}
+
+// Dark mode variables
+:root.dark-mode {
+  --bg-primary: #{map.get($gray-palette, 900)};
+  --bg-secondary: #{map.get($gray-palette, 800)};
+  --bg-tertiary: #{map.get($gray-palette, 700)};
+  --bg-card: #{map.get($gray-palette, 800)};
+  --bg-overlay: rgba(0, 0, 0, 0.8);
+  
+  --text-primary: #{map.get($gray-palette, 50)};
+  --text-secondary: #{map.get($gray-palette, 300)};
+  --text-muted: #{map.get($gray-palette, 400)};
+  
+  --border-color: #{map.get($gray-palette, 600)};
+  --state-hover: rgba(255, 255, 255, 0.05);
+  --state-active: rgba(255, 255, 255, 0.1);
+}
+
+// =============================================================================
+// TYPOGRAPHY SYSTEM - Modern font scale
+// =============================================================================
+
+$font-families: (
+  'primary': ('Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', sans-serif),
+  'display': ('Inter', 'system-ui', sans-serif),
+  'mono': ('JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', monospace)
+) !default;
+
+$font-weights: (
+  'light': 300,
+  'normal': 400,
+  'medium': 500,
+  'semibold': 600,
+  'bold': 700,
+  'black': 900
+) !default;
+
+$font-sizes: (
+  'xs': 0.75rem,    // 12px
+  'sm': 0.875rem,   // 14px
+  'base': 1rem,     // 16px
+  'lg': 1.125rem,   // 18px
+  'xl': 1.25rem,    // 20px
+  '2xl': 1.5rem,    // 24px
+  '3xl': 1.875rem,  // 30px
+  '4xl': 2.25rem,   // 36px
+  '5xl': 3rem,      // 48px
+  '6xl': 3.75rem,   // 60px
+  '7xl': 4.5rem,    // 72px
+  '8xl': 6rem,      // 96px
+  '9xl': 8rem       // 128px
+) !default;
+
+$line-heights: (
+  'none': 1,
+  'tight': 1.25,
+  'snug': 1.375,
+  'normal': 1.5,
+  'relaxed': 1.625,
+  'loose': 2
+) !default;
+
+// =============================================================================
+// SPACING SYSTEM - 8px grid system
+// =============================================================================
+
+$spacing: (
+  0: 0,
+  1: 0.25rem,   // 4px
+  2: 0.5rem,    // 8px
+  3: 0.75rem,   // 12px
+  4: 1rem,      // 16px
+  5: 1.25rem,   // 20px
+  6: 1.5rem,    // 24px
+  8: 2rem,      // 32px
+  10: 2.5rem,   // 40px
+  12: 3rem,     // 48px
+  16: 4rem,     // 64px
+  20: 5rem,     // 80px
+  24: 6rem,     // 96px
+  32: 8rem,     // 128px
+  40: 10rem,    // 160px
+  48: 12rem,    // 192px
+  56: 14rem,    // 224px
+  64: 16rem     // 256px
+) !default;
+
+// =============================================================================
+// BORDER RADIUS SYSTEM
+// =============================================================================
+
+$border-radius: (
+  'none': 0,
+  'sm': 0.125rem,   // 2px
+  'md': 0.375rem,   // 6px
+  'lg': 0.5rem,     // 8px
+  'xl': 0.75rem,    // 12px
+  '2xl': 1rem,      // 16px
+  '3xl': 1.5rem,    // 24px
+  'full': 9999px
+) !default;
+
+// =============================================================================
+// ANIMATION SYSTEM
+// =============================================================================
+
+$transitions: (
+  'fast': 150ms ease-in-out,
+  'normal': 250ms ease-in-out,
+  'slow': 350ms ease-in-out,
+  'bounce': 350ms cubic-bezier(0.68, -0.55, 0.265, 1.55)
+) !default;
+
+$animations: (
+  'spin': spin 1s linear infinite,
+  'ping': ping 1s cubic-bezier(0, 0, 0.2, 1) infinite,
+  'pulse': pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite,
+  'bounce': bounce 1s infinite
+) !default;
+
+// =============================================================================
+// Z-INDEX SYSTEM
+// =============================================================================
+
+$z-index: (
+  'dropdown': 1000,
+  'sticky': 1020,
+  'fixed': 1030,
+  'modal-backdrop': 1040,
+  'modal': 1050,
+  'popover': 1060,
+  'tooltip': 1070
+) !default;
+
+// =============================================================================
+// COMPONENT SPECIFIC VARIABLES
+// =============================================================================
+
+// Card system
+$card-padding: map.get($spacing, 6);
+$card-border-radius: map.get($border-radius, 'xl');
+$card-shadow: var(--shadow-lg);
+
+// Button system
+$button-height: (
+  'sm': 2rem,
+  'md': 2.5rem,
+  'lg': 3rem,
+  'xl': 3.5rem
+) !default;
+
+$button-padding: (
+  'sm': 0.5rem 1rem,
+  'md': 0.75rem 1.5rem,
+  'lg': 1rem 2rem,
+  'xl': 1.25rem 2.5rem
+) !default;
+
+// Form controls
+$input-height: 2.75rem;
+$input-padding: 0.75rem 1rem;
+$input-border-radius: map.get($border-radius, 'lg');
+
+// Gaming specific
+$pokeball-size: 3rem;
+$type-badge-height: 1.5rem;
+$stat-bar-height: 0.5rem;
