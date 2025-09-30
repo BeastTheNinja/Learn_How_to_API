@@ -3,25 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Template Boilerplate</title>
+    <title>PokéDex Explorer - Gotta Catch 'Em All!</title>
     <link rel="stylesheet" href="assets/css/main.css">
+    <script src="assets/js/main.js" defer></script>
 </head>
 <body>
     <header>
-        <h1>Welcome to Template Boilerplate</h1>
+        <h1>🔴 PokéDex Explorer</h1>
+        <p>Discover amazing Pokémon from the Kanto region and beyond!</p>
     </header>
     
     <main>
-        <section>
-            <h2>Getting Started</h2>
-            <p>This is a simple boilerplate template for web development. Start building your project by editing this HTML file and the associated CSS and JavaScript files.</p>
+        <section class="controls">
+            <h2>Search Pokémon</h2>
+            
+            <div class="search-options">
+                <div class="search-group">
+                    <label for="pokemon-search">Enter Pokémon name or ID (1-1010):</label>
+                    <div class="search-container">
+                        <input type="text" id="pokemon-search" placeholder="e.g., pikachu, charizard, 25" class="search-input">
+                        <button id="search-btn" class="search-btn">🔍 Search</button>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="random-btn" class="action-btn random">🎲 Random Pokémon</button>
+                    <button id="surprise-btn" class="action-btn surprise">✨ Surprise Me!</button>
+                </div>
+            </div>
+            
+            <div id="loading" class="loading" style="display: none;">
+                <div class="pokeball-loader"></div>
+                <p>Searching for Pokémon...</p>
+            </div>
+        </section>
+        
+        <section id="output" class="pokemon-display">
+            <div class="welcome-message">
+                <h3>🌟 Welcome to the PokéDex!</h3>
+                <p>Search for any Pokémon by name or number to see their stats, abilities, and more!</p>
+                <p>Try searching for popular Pokémon like "pikachu", "charizard", or "mewtwo"</p>
+                <div class="popular-pokemon">
+                    <h4>Popular Choices:</h4>
+                    <div class="quick-buttons">
+                        <button class="quick-btn" onclick="searchPokemon('pikachu')">Pikachu</button>
+                        <button class="quick-btn" onclick="searchPokemon('charizard')">Charizard</button>
+                        <button class="quick-btn" onclick="searchPokemon('blastoise')">Blastoise</button>
+                        <button class="quick-btn" onclick="searchPokemon('venusaur')">Venusaur</button>
+                        <button class="quick-btn" onclick="searchPokemon('mewtwo')">Mewtwo</button>
+                    </div>
+                </div>
+            </div>
         </section>
     </main>
     
     <footer>
-        <p>&copy; 2025 Template Boilerplate. Licensed under MIT.</p>
+        <p>&copy; 2025 PokéDex Explorer. Powered by PokéAPI | Licensed under MIT.</p>
     </footer>
-    
-    <script src="assets/js/main.js"></script>
 </body>
 </html>
