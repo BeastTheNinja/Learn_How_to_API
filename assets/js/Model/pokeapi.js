@@ -1,22 +1,24 @@
 
+// Pokemon API Model - Handles all API interactions and caching
+// This file contains API configuration and data fetching functions
+
 // API Configuration - Constants for our external API
 // Using const ensures these values cannot be accidentally changed
 const POKEAPI_BASE = 'https://pokeapi.co/api/v2';  // Base URL for PokéAPI
 const POKEMON_ENDPOINT = `${POKEAPI_BASE}/pokemon`; // Template literal to build endpoint
 
+// Cache System - Using Map for performance optimization
+// Map is more efficient than objects for frequent additions/deletions
+// This prevents unnecessary API calls for previously fetched Pokémon
+const pokemonCache = new Map();
 
-async function fetchPokemon(pokemonName) {
-    // Get DOM elements we'll need to update during the process
-    const loadingElement = document.getElementById('loading');
-    const outputElement = document.getElementById('output');
-    
+// Main function to fetch Pokémon data from the API
+// 'async' keyword allows us to use 'await' inside this function
+// This makes asynchronous code look and behave more like synchronous code
+export async function fetchPokemon(pokemonName) {
     // try/catch block for comprehensive error handling
     // 'try' contains code that might fail, 'catch' handles any errors
     try {
-        // Show loading indicator to improve user experience
-        // Optional chaining (?.) prevents errors if element doesn't exist
-        if (loadingElement) loadingElement.style.display = 'block';
-        
         // Data sanitization - clean user input to prevent issues
         // toString() ensures we can handle both strings and numbers
         // toLowerCase() makes search case-insensitive
@@ -27,8 +29,7 @@ async function fetchPokemon(pokemonName) {
         // Map.has() is O(1) operation - very fast lookup
         if (pokemonCache.has(cleanName)) {
             console.log('Using cached data for:', cleanName);
-            displayPokemon(pokemonCache.get(cleanName));
-            return; // Exit early if we have cached data
+            return pokemonCache.get(cleanName);
         }
         
         console.log('Fetching Pokémon:', cleanName);
@@ -58,17 +59,38 @@ async function fetchPokemon(pokemonName) {
         // Using the cleaned name as key ensures consistency
         pokemonCache.set(cleanName, pokemonData);
         
-        // Display the Pokémon data to the user
-        displayPokemon(pokemonData);
+        return pokemonData;
         
     } catch (error) {
         // Error handling - catch any errors from the try block
         // This includes network errors, JSON parsing errors, or custom thrown errors
         console.error('Error fetching Pokémon:', error);
-        showError(error.message);
-    } finally {
-        // 'finally' block always executes, regardless of success or failure
-        // Perfect for cleanup operations like hiding loading indicators
-        if (loadingElement) loadingElement.style.display = 'none';
+        throw error; // Re-throw to let the caller handle the error display
     }
+}
+
+// Clear cache function for development/debugging
+export function clearPokemonCache() {
+    pokemonCache.clear();
+    console.log('Pokemon cache cleared');
+}
+
+// Get cache size for debugging
+export function getCacheSize() {
+    return pokemonCache.size;
+}
+
+// Preload popular Pokemon for better user experience
+export async function preloadPopularPokemon() {
+    const popularNames = ['pikachu', 'charizard', 'blastoise', 'venusaur'];
+    
+    for (const name of popularNames) {
+        try {
+            await fetchPokemon(name);
+        } catch (error) {
+            console.warn(`Failed to preload ${name}:`, error.message);
+        }
+    }
+    
+    console.log(`Preloaded ${getCacheSize()} Pokemon`);
 }

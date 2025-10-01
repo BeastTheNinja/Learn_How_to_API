@@ -19,11 +19,8 @@ import './view/pokemonDisplay.js';
 import './view/favoritesView.js';
 
 // Controllers - Logic layer (import specific functions we need)
-import { initializePokemonController, searchPokemon, getRandomPokemon, handleToggleFavorite, handleRemoveFavorite } from './controller/pokemonController.js';
+import { initializePokemonController } from './controller/pokemonController.js';
 import { initializeApp, showTypeEffectiveness } from './controller/appController.js';
-
-// Import utility functions that need to be globally available
-import { copyPokemonInfo } from './view/utilityFunctions.js';
 
 // Application initialization
 function startApplication() {
@@ -46,8 +43,3 @@ document.addEventListener('DOMContentLoaded', startApplication);
 // Export global functions for backward compatibility with HTML onclick handlers
 // This ensures existing onclick attributes in the HTML still work
 window.showTypeEffectiveness = showTypeEffectiveness;
-window.searchPokemon = searchPokemon;
-window.getRandomPokemon = getRandomPokemon;
-window.handleToggleFavorite = handleToggleFavorite;
-window.handleRemoveFavorite = handleRemoveFavorite;
-window.copyPokemonInfo = copyPokemonInfo;
