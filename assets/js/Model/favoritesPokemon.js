@@ -1,0 +1,1 @@
+let favoritesPokemon = JSON.parse(localStorage.getItem('pokemonFavorites')) || [];
