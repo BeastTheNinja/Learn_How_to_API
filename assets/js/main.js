@@ -17,10 +17,30 @@ import './Model/favoritesPokemon.js';
 import './view/utilityFunctions.js';
 import './view/pokemonDisplay.js';
 import './view/favoritesView.js';
+import './view/gamingDisplay.js';
 
 // Controllers - Logic layer (import specific functions we need)
 import { initializePokemonController, searchPokemon, getRandomPokemon, handleToggleFavorite, handleRemoveFavorite } from './controller/pokemonController.js';
 import { initializeApp, showTypeEffectiveness } from './controller/appController.js';
+import { 
+    initializeGamingFeatures, 
+    addPokemonToSlot, 
+    removeFromComparison, 
+    clearComparison,
+    addPokemonToBattle,
+    removeFromBattle,
+    calculateBattleDamage,
+    showEvolutionChain,
+    generateNewQuizQuestion,
+    selectQuizAnswer,
+    revealQuizAnswer,
+    resetQuizGame,
+    showPokemonMoves,
+    toggleShinyMode,
+    showBattleCalculator,
+    calculateDamage,
+    startQuizGame
+} from './controller/gamingController.js';
 
 // Import utility functions that need to be globally available
 import { copyPokemonInfo } from './view/utilityFunctions.js';
@@ -33,6 +53,7 @@ function startApplication() {
         // Initialize all controllers in the correct order
         initializePokemonController();
         initializeApp();
+        initializeGamingFeatures();
         
         console.log('✅ PokéDex Explorer App initialized successfully!');
     } catch (error) {
@@ -51,3 +72,21 @@ window.getRandomPokemon = getRandomPokemon;
 window.handleToggleFavorite = handleToggleFavorite;
 window.handleRemoveFavorite = handleRemoveFavorite;
 window.copyPokemonInfo = copyPokemonInfo;
+
+// Gaming features global exports
+window.addPokemonToSlot = addPokemonToSlot;
+window.removeFromComparison = removeFromComparison;
+window.clearComparison = clearComparison;
+window.addPokemonToBattle = addPokemonToBattle;
+window.removeFromBattle = removeFromBattle;
+window.calculateBattleDamage = calculateBattleDamage;
+window.showEvolutionChain = showEvolutionChain;
+window.generateNewQuizQuestion = generateNewQuizQuestion;
+window.selectQuizAnswer = selectQuizAnswer;
+window.revealQuizAnswer = revealQuizAnswer;
+window.resetQuizGame = resetQuizGame;
+window.showPokemonMoves = showPokemonMoves;
+window.toggleShinyMode = toggleShinyMode;
+window.showBattleCalculator = showBattleCalculator;
+window.calculateDamage = calculateDamage;
+window.startQuizGame = startQuizGame;
